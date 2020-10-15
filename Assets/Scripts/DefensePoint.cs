@@ -6,26 +6,21 @@ public class DefensePoint : MonoBehaviour
 {
     // Health of the defense point
     public float health = 200f;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public GameManager myGameManager; // Ref to game Manager
+
+    private void Start()
     {
-        
+        myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
     }
 
     // Defense point takes damage
     public void DefenseTakeDamage(float amount)
     {
         health -= amount;
-        if(health <= 0f)
+        if (health <= 0f)
         {
-            Destroy(gameObject);
+            myGameManager.isGameRunning = false;
         }
     }
 }

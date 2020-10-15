@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
     public CharacterController playerController;  // Character Controller component of player
+    public GameManager myGameManager; // Ref to game manager
 
+    // Player statistics
     public float playerHealth;  // How much health does player have
     public float playerSpeed;   // How fast can player move
     public float walkSpeed = 5f;   // Speed player can move while walking
@@ -24,13 +25,40 @@ public class Player : MonoBehaviour
     private Vector3 velocity;   // Player's physics
     public bool isGrounded;    // is player grounded?
     public bool isCrouched;    // is player crouched?
+    public bool isPlayerAlive; // Is player alive?
+
+    private void Start()
+    {
+        isPlayerAlive = true;
+        myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
+    }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
+        if (myGameManager.isGameRunning)
+        {
+            if (isPlayerAlive)
+            {   // Player can move since game is running and player is alive
+                Move();
+            }
+            else
+            {   // Game is not running and player has lost the game
+                myGameManager.isGameRunning = false;
+            }
+        }
+        else
+        {
+            EndGame(false);
+        }
     }
 
+    // Game over window pops up
+    public void EndGame(bool isWin)
+    {
+        Cursor.lockState = CursorLockMode.None;
+        myGameManager.GameOver(isWin);
+    }
 
     // Player takes damage
     public void PlayerTakeDamage(float amount)
@@ -38,12 +66,12 @@ public class Player : MonoBehaviour
         playerHealth -= amount;
         if (playerHealth <= 0f)
         {
-            Destroy(gameObject);
+            isPlayerAlive = false;
         }
     }
 
     // Player moves
-    void Move()
+    private void Move()
     {
         float xDir = Input.GetAxis("Horizontal");
         float zDir = Input.GetAxis("Vertical");
@@ -59,7 +87,7 @@ public class Player : MonoBehaviour
 
 
     // Player jumps
-    void Jump()
+    private void Jump()
     {
         // Checks if player is grounded
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -81,7 +109,7 @@ public class Player : MonoBehaviour
     }
 
     // Player crouches
-    void Crouch()
+    private void Crouch()
     {
         if (Input.GetKey(KeyCode.LeftControl))
         {

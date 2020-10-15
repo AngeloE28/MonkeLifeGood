@@ -10,17 +10,6 @@ public class Bullet : MonoBehaviour
     private EnemyAi enemy;
     
     public float damage;    // How much damage does one bullet do?
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
 
     private void OnCollisionEnter(Collision collision)
     {

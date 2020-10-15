@@ -219,7 +219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletRb: {fileID: 595177093938265896}
   impact: {fileID: 7862055748123723859, guid: b14b6ab82160c5248a3a182b29de2db6, type: 3}
-  damage: 20
+  damage: 40
 --- !u!64 &-2376638500035646728
 MeshCollider:
   m_ObjectHideFlags: 0

@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     // Refer to last term assesment for the ui window and stuff
     [Header("UI")]
     public GameObject uiGameOverWindow; // Displays the  Game OVer window with the uiGameOverMsg
-   
+    public TMP_Text uiGameOverMsg; // Displays the game over message depending on the outcome of the game (win or lose)
+
+    [Header("Gameplay Loop")]
+    public bool isGameRunning; //Is the gameplay part of the game currently active?
+
     // Start is called before the first frame update
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        isGameRunning = true; // Game is running
     }
 
     // Restarts the game
@@ -29,9 +28,10 @@ public class GameManager : MonoBehaviour
     }
 
     // Goes back to the main menu
-    public void Quit()
+    public void QuitGame()
     {
-        SceneManager.LoadScene(0); // Main menu index is 0 in the build settings
+        Application.Quit(); // quits the build
+        //SceneManager.LoadScene(0); // Main menu index is 0 in the build settings
     }
 
     // Control to end the game
@@ -39,11 +39,11 @@ public class GameManager : MonoBehaviour
     {
         if (isWin)
         {
-            // Display a win message
+            uiGameOverMsg.text = "Family saved! LIFE GOOD";
         }
         else
         {
-            // Display a lose message
+            uiGameOverMsg.text = "Family gone...Regret.";
         }
         uiGameOverWindow.SetActive(true);
     }

@@ -9,7 +9,7 @@ public class EnemyAi : MonoBehaviour
 
     public GameObject player;   // Reference to player
     private Player attackPlayer;
-    
+
     public GameObject defensePoint; // Reference to defense point
     private DefensePoint attackDP;
 
@@ -17,7 +17,6 @@ public class EnemyAi : MonoBehaviour
 
     public LayerMask groundmask;    // Where can enemy walk on
     public LayerMask playerMask;    // Finds objects with layer of player
-    public LayerMask defenseMask;   // Finds objects with layer of defend
 
     public float sightRange;    // How far can enemy see?
     public bool playerInSightRange; // Is player within enemy sight?
@@ -28,14 +27,14 @@ public class EnemyAi : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        agent = GetComponent<NavMeshAgent>();
+        player = GameObject.FindGameObjectWithTag("player"); // Finds gameobject with tag of player
+        defensePoint = GameObject.FindGameObjectWithTag("Defend");  // Finds gameobject with tag of Defend
     }
-    
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        gameObject.GetComponent<NavMeshAgent>().SetDestination(player.transform.position);
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
 
         if (!playerInSightRange)
@@ -62,18 +61,18 @@ public class EnemyAi : MonoBehaviour
     // Chase the player
     private void ChasePlayer()
     {
-        GetComponent<NavMeshAgent>().SetDestination(player.transform.position);
+        agent.SetDestination(player.transform.position);
     }
 
     // Chase the defense point
     private void AttackDefensePoint()
     {
-        GetComponent<NavMeshAgent>().SetDestination(defensePoint.transform.position);
+        agent.SetDestination(defensePoint.transform.position);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.transform.tag == "player")
+        if (collision.transform.tag == "player")
         {
             attackPlayer = collision.transform.GetComponent<Player>();
             attackPlayer.PlayerTakeDamage(playerDamage);

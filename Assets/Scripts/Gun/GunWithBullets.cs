@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class GunWithBullets : MonoBehaviour
 {
-
+    public GameManager myGameManager; // Ref to the game manager
     public GameObject bullet;   // The bullet the gun shoots out
     public GameObject player;   // Ref to player
     public ParticleSystem muzzleFlash; // The muzzle flash when shooting
@@ -54,22 +54,27 @@ public class GunWithBullets : MonoBehaviour
 
         bulletsLeft = magSize;
         readyToShoot = true;
+        myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
     }
 
     // Update is called once per frame
     void Update()
     {
-        PlayerInput();
-
-        // Display ammo
-        if(ammoDisplay != null)
+        if (myGameManager.isGameRunning)
         {
-            ammoDisplay.SetText("Ammo: " + bulletsLeft / bulletsPerClick + " / " + magSize / bulletsPerClick);
+            PlayerInput();
+
+            // Display ammo
+            if (ammoDisplay != null)
+            {
+                ammoDisplay.SetText("Ammo: " + bulletsLeft / bulletsPerClick + " / " + magSize / bulletsPerClick);
+            }
         }
+        else { return; }
     }
 
     // Takes player input
-    void PlayerInput()
+    private void PlayerInput()
     {
         // Player can hold the left click to spray bullets
         if (allowGunToSpray)
@@ -82,18 +87,18 @@ public class GunWithBullets : MonoBehaviour
         }
 
         // Player relaods
-        if(Input.GetKeyDown(KeyCode.R) && bulletsLeft < magSize && !reloading)
+        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magSize && !reloading)
         {
             Reload();
         }
         // Player is forced to reload
-        if(readyToShoot && shooting && !reloading && bulletsLeft <= 0)
+        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0)
         {
             Reload();
         }
 
         // Player fires gun
-        if(readyToShoot && shooting & !reloading && bulletsLeft > 0)
+        if (readyToShoot && shooting & !reloading && bulletsLeft > 0)
         {
             bulletsShot = 0;
 
@@ -113,7 +118,7 @@ public class GunWithBullets : MonoBehaviour
     }
 
     // Controls the shooting of the gun
-    void Shoot()
+    private void Shoot()
     {
         readyToShoot = false;
 
@@ -135,7 +140,7 @@ public class GunWithBullets : MonoBehaviour
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
 
         // Calculate spread when player is standing
-        if(!player.GetComponent<Player>().isCrouched)
+        if (!player.GetComponent<Player>().isCrouched)
         {
             x = Random.Range(-bulletSpread, bulletSpread);
             y = Random.Range(-bulletSpread, bulletSpread);
@@ -162,14 +167,14 @@ public class GunWithBullets : MonoBehaviour
         bulletsLeft--;
         bulletsShot++;
 
-        if(allowInvoke)
+        if (allowInvoke)
         {
             Invoke("ResetShot", fireRate);
             allowInvoke = false;
         }
 
         // Shooting for guns like shotguns or burst fire guns
-        if(bulletsShot < bulletsPerClick && bulletsLeft > 0)
+        if (bulletsShot < bulletsPerClick && bulletsLeft > 0)
         {
             Invoke("Shoot", fireRate);
         }
@@ -189,13 +194,13 @@ public class GunWithBullets : MonoBehaviour
         showReloading.gameObject.SetActive(true);
         showReloading.SetText("Reloading...");
         Invoke("ReloadFinish", reloadTime); // Calls a function with delay             
-    }                                                                                  
-                                                                                       
+    }
+
     // Refills the magazine                                                            
-    private void ReloadFinish()                                                                
-    {                                                                                  
+    private void ReloadFinish()
+    {
         showReloading.gameObject.SetActive(false);
         bulletsLeft = magSize;
         reloading = false;
-    }    
+    }
 }
