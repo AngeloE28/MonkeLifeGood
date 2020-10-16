@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     public CharacterController playerController;  // Character Controller component of player
     public GameManager myGameManager; // Ref to game manager
+    public FPSCamera myCam;
 
     // Player statistics
     public float playerHealth;  // How much health does player have
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour
     {
         isPlayerAlive = true;
         myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
+        myCam = GameObject.Find("Main Camera").GetComponent<FPSCamera>(); // Gets the FPScamera script
     }
 
     // Update is called once per frame
@@ -57,6 +59,8 @@ public class Player : MonoBehaviour
     public void EndGame(bool isWin)
     {
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        myCam.enabled = false;
         myGameManager.GameOver(isWin);
     }
 

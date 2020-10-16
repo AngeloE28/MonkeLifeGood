@@ -28,9 +28,9 @@ public class GunWithBullets : MonoBehaviour
     private int bulletsLeft;
     private int bulletsShot;
 
-    // Two variables to control the spray of bullets when player is standing or crouching
-    private float x;
-    private float y;
+    // The variables to control the spray of bullets when player is standing or crouching
+    private float xDir;
+    private float yDir;
 
     private bool shooting; // how can player shoot?
     private bool readyToShoot;  // Can player shoot?
@@ -123,7 +123,7 @@ public class GunWithBullets : MonoBehaviour
         readyToShoot = false;
 
         // Ray going through the middle of the screen
-        Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hitInfo;
 
         Vector3 targetPoint;
@@ -142,17 +142,17 @@ public class GunWithBullets : MonoBehaviour
         // Calculate spread when player is standing
         if (!player.GetComponent<Player>().isCrouched)
         {
-            x = Random.Range(-bulletSpread, bulletSpread);
-            y = Random.Range(-bulletSpread, bulletSpread);
+            xDir = Random.Range(-bulletSpread, bulletSpread);
+            yDir = Random.Range(-bulletSpread, bulletSpread);
         }
         else // Calculate spread when player is crouching
         {
-            x = Random.Range(-bulletSpreadWhenCrouching, bulletSpreadWhenCrouching);
-            y = Random.Range(-bulletSpreadWhenCrouching, bulletSpreadWhenCrouching);
+            xDir = Random.Range(-bulletSpreadWhenCrouching, bulletSpreadWhenCrouching);
+            yDir = Random.Range(-bulletSpreadWhenCrouching, bulletSpreadWhenCrouching);
         }
 
         // Direction from attackpoint to targetpoint with the spread
-        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0);
+        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(xDir, yDir, 0);
 
         // Spawn the bullets
         GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);

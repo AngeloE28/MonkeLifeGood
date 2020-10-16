@@ -16,6 +16,7 @@ public class FPSCamera : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -31,7 +32,7 @@ public class FPSCamera : MonoBehaviour
         player.Rotate(Vector3.up * mouseX);
 
         // Slows down mouse sensitivity when player is aiming down sight
-        if(Input.GetButton("Fire2"))
+        if (Input.GetButton("Fire2"))
         {
             mouseSensitivity = hipFireSensitivity / aimDownSightSensitivity;
         }
