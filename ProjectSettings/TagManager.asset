@@ -8,6 +8,8 @@ TagManager:
   - Ground
   - Defend
   - player
+  - Boss
+  - B_Shield
   layers:
   - Default
   - TransparentFX

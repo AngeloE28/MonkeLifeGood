@@ -8,9 +8,11 @@ public class DefensePoint : MonoBehaviour
     public float health = 200f;
 
     public GameManager myGameManager; // Ref to game Manager
+    public Player player;
 
     private void Start()
     {
+        player = GameObject.Find("Player").GetComponent<Player>(); // Finds gameobject with tag of player
         myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
     }
 
@@ -20,7 +22,7 @@ public class DefensePoint : MonoBehaviour
         health -= amount;
         if (health <= 0f)
         {
-            myGameManager.isGameRunning = false;
+            player.EndGame(false);  
         }
     }
 }

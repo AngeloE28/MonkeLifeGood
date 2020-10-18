@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class EnemySpawner : MonoBehaviour
+using UnityEngine.AI;
+public class Boss : MonoBehaviour
 {
+    public float bossHealth; // How much health does the boss have?
+
     // Which state is the spawner currently in?
     public enum SpawnState
     {
@@ -24,31 +26,41 @@ public class EnemySpawner : MonoBehaviour
 
     public Wave[] waves; // How many waves?
     public Transform[] spawnPoints; // The spawnpoints of the enemy
-
     private int nextWave;
     public float timeBetweenWaves = 5f; // Time between each waves
     private float waveCountdown; // Countdown till the next wave
     private float checkIfEnemyAliveCountdown = 1f; // Time limit to search if enemies are still alive
-
     private SpawnState state = SpawnState.COUNTINGDOWN;
 
     public GameManager myGameManager;
     public GameObject player;
+    public NavMeshAgent agent;  // Navemesh agent of the enemy
+
 
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("player"); // Finds gameobject with tag of player
         nextWave = 0; // Start at the first wave
         waveCountdown = timeBetweenWaves;
-        myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
+        myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script        
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {        
         // Is game running?
         if (myGameManager.isGameRunning)
         {
+            if (bossHealth <= 0f)
+            {
+                agent.isStopped = true;
+                player.GetComponent<Player>().EndGame(true);
+                myGameManager.isGameRunning = false;
+            }
+            // change the else statement to a follow path instead
+            else { agent.SetDestination(player.transform.position); }
+
             // Check if there are enemies still alive
             if (state == SpawnState.WAITING)
             {
@@ -62,6 +74,7 @@ public class EnemySpawner : MonoBehaviour
             // Interval between waves
             if (waveCountdown <= 0)
             {
+                transform.GetComponent<BoxCollider>().enabled = false; // Enables box collider so player can damage boss
                 if (state != SpawnState.SPAWNING)
                 {
                     //start spawning wave
@@ -70,10 +83,17 @@ public class EnemySpawner : MonoBehaviour
             }
             else
             {
+                transform.GetComponent<BoxCollider>().enabled = true; // Set to false, so player won't be able to damage it at the start
                 waveCountdown -= Time.deltaTime;
             }
         }
         else { return; }
+    }
+
+    // Boss takes damage
+    public void BossTakeDamage(float amount)
+    {
+        bossHealth -= amount;
     }
 
     // If wave has been cleared, start the next one
@@ -87,7 +107,7 @@ public class EnemySpawner : MonoBehaviour
         // Check to see if final wave has been reached
         if (nextWave + 1 > waves.Length - 1)
         {
-            nextWave = -1; // Sets the index to outside the bounds of the array so it doesnt spawn anything extra
+            nextWave = 0; // Resets the index of the array so it endlessly spawns until boss is dead
         }
         else // Else it just moves on to the next wave
         {
@@ -104,7 +124,7 @@ public class EnemySpawner : MonoBehaviour
         if (checkIfEnemyAliveCountdown <= 0f)
         {
             checkIfEnemyAliveCountdown = 1f; // Resets countdown
-            if (GameObject.FindGameObjectWithTag("Enemy") == null || GameObject.FindGameObjectsWithTag("Boss") == null)
+            if (GameObject.FindGameObjectWithTag("Enemy") == null)
             {
                 return false;
             }

@@ -46,12 +46,8 @@ public class Player : MonoBehaviour
             }
             else
             {   // Game is not running and player has lost the game
-                myGameManager.isGameRunning = false;
+                EndGame(false);
             }
-        }
-        else
-        {
-            EndGame(false);
         }
     }
 
@@ -61,6 +57,7 @@ public class Player : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         myCam.enabled = false;
+        myGameManager.isGameRunning = false;
         myGameManager.GameOver(isWin);
     }
 
