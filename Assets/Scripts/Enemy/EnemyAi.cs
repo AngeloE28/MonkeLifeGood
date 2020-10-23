@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro;
 
 public class EnemyAi : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class EnemyAi : MonoBehaviour
 
     public GameObject defensePoint; // Reference to defense point
     private DefensePoint attackDP;
+
+    public TMP_Text showEnemyHealth;    
 
     public NavMeshAgent agent;  // Navemesh agent of the enemy
 
@@ -37,6 +40,8 @@ public class EnemyAi : MonoBehaviour
     {
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
 
+        showEnemyHealth.text = enemyHealth.ToString();
+
         if (!playerInSightRange)
         {
             AttackDefensePoint();
@@ -45,7 +50,6 @@ public class EnemyAi : MonoBehaviour
         {
             ChasePlayer();
         }
-
     }
 
     // Enemy takes damage

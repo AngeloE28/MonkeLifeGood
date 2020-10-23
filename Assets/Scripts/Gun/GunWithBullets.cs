@@ -12,11 +12,11 @@ public class GunWithBullets : MonoBehaviour
     public ParticleSystem muzzleFlash; // The muzzle flash when shooting
     public TextMeshProUGUI ammoDisplay; // Displays ammo
     public TextMeshProUGUI showReloading;   // Shows gun is reloading
-
-    // How fast is the bullet
-    public float shootingForce;
+    public Camera playerCam; // Ref to main camera
+    public Transform attackPoint;   // where bullets will come out of
 
     // Statistics of the gun
+    public float shootingForce;
     public float timeBetweenSprays;
     public float bulletSpread;
     public float bulletSpreadWhenCrouching;
@@ -36,9 +36,6 @@ public class GunWithBullets : MonoBehaviour
     private bool readyToShoot;  // Can player shoot?
     private bool reloading; // is player reloading?
 
-    public Camera playerCam; // Ref to main camera
-    public Transform attackPoint;   // where bullets will come out of
-
     public bool allowInvoke = true;
 
     // position of the gun
@@ -46,6 +43,8 @@ public class GunWithBullets : MonoBehaviour
     public Vector3 hipFire;
 
     public float adsSpeed;  // How fast does the gun move when player aim down sight?
+    private int normalFieldOfView = 60;
+    private int adsFieldOfView = 50;
 
     // Start is called before the first frame update
     void Start()
@@ -109,10 +108,18 @@ public class GunWithBullets : MonoBehaviour
         // Player aims down sight
         if (Input.GetKey(KeyCode.Mouse1))
         {
+            if(playerCam.fieldOfView > adsFieldOfView)
+            {
+                playerCam.fieldOfView += (-25 * Time.deltaTime);
+            }
             transform.localPosition = Vector3.Slerp(transform.localPosition, aimDownSight, adsSpeed * Time.deltaTime);
         }
         else
         {
+            if (playerCam.fieldOfView < normalFieldOfView)
+            {
+                playerCam.fieldOfView += (25 * Time.deltaTime);
+            }
             transform.localPosition = Vector3.Slerp(transform.localPosition, hipFire, adsSpeed * Time.deltaTime);
         }
     }

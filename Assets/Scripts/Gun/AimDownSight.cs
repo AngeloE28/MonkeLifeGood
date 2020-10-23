@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class AimDownSight : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class AimDownSight : MonoBehaviour
     public Vector3 hipFire;
 
     public float aimSpeed;
+
+    public Camera myCam;
 
     // Start is called before the first frame update
     void Start()
@@ -20,8 +23,9 @@ public class AimDownSight : MonoBehaviour
     void Update()
     {
         // Aims down sight
-        if(Input.GetButton("Fire2"))
+        if(Input.GetKey(KeyCode.Mouse1))
         {
+            myCam.fieldOfView = 50;
             // this is for the reloading but i scrapped it refer back to here if i decide i want it back
             transform.localPosition = Vector3.Slerp(transform.localPosition, aimDownSight, aimSpeed * Time.deltaTime);
             if(transform.rotation.x != 12.6f && transform.rotation.y != -21.4f)
@@ -31,6 +35,7 @@ public class AimDownSight : MonoBehaviour
         }
         else
         {
+            myCam.fieldOfView = 60;
             transform.localPosition = Vector3.Slerp(transform.localPosition, hipFire, aimSpeed * Time.deltaTime);
             if (transform.rotation.x != 0 && transform.rotation.y != 0)
             {

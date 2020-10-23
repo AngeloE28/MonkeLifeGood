@@ -5,7 +5,7 @@ using UnityEngine;
 public class DefensePoint : MonoBehaviour
 {
     // Health of the defense point
-    public float health = 200f;
+    public float defenseHealth = 200f;
 
     public GameManager myGameManager; // Ref to game Manager
     public Player player;
@@ -19,8 +19,8 @@ public class DefensePoint : MonoBehaviour
     // Defense point takes damage
     public void DefenseTakeDamage(float amount)
     {
-        health -= amount;
-        if (health <= 0f)
+        defenseHealth -= amount;
+        if (defenseHealth <= 0f)
         {
             player.EndGame(false);  
         }

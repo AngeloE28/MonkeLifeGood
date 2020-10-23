@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
@@ -34,6 +35,7 @@ public class EnemySpawner : MonoBehaviour
 
     public GameManager myGameManager;
     public GameObject player;
+    public TMP_Text statusTitle;
 
     // Start is called before the first frame update
     void Start()
@@ -41,6 +43,7 @@ public class EnemySpawner : MonoBehaviour
         nextWave = 0; // Start at the first wave
         waveCountdown = timeBetweenWaves;
         myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
+        statusTitle.gameObject.SetActive(true);
     }
 
     // Update is called once per frame
@@ -52,6 +55,7 @@ public class EnemySpawner : MonoBehaviour
             // Check if there are enemies still alive
             if (state == SpawnState.WAITING)
             {
+                statusTitle.gameObject.SetActive(false);
                 if (!EnemyIsAlive())
                 {
                     WaveCleared();
@@ -62,6 +66,7 @@ public class EnemySpawner : MonoBehaviour
             // Interval between waves
             if (waveCountdown <= 0)
             {
+                statusTitle.gameObject.SetActive(true);
                 if (state != SpawnState.SPAWNING)
                 {
                     //start spawning wave
@@ -100,7 +105,6 @@ public class EnemySpawner : MonoBehaviour
     private bool EnemyIsAlive()
     {
         checkIfEnemyAliveCountdown -= Time.deltaTime;
-
         if (checkIfEnemyAliveCountdown <= 0f)
         {
             checkIfEnemyAliveCountdown = 1f; // Resets countdown
@@ -116,8 +120,9 @@ public class EnemySpawner : MonoBehaviour
     IEnumerator SpawnWave(Wave enemyWave)
     {
         print("Spawning wave" + enemyWave.waveName);
-        state = SpawnState.SPAWNING; // Spawns the wave
+        statusTitle.SetText("Spawning wave" + enemyWave.waveName);
 
+        state = SpawnState.SPAWNING; // Spawns the wave
         for (int i = 0; i < enemyWave.enemyCount; i++)
         {
             SpawnEnemey(enemyWave.enemyPrefab);

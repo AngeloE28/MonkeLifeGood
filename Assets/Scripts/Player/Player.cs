@@ -1,12 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public CharacterController playerController;  // Character Controller component of player
     public GameManager myGameManager; // Ref to game manager
+    public DefensePoint myDp;
     public FPSCamera myCam;
+    public TMP_Text showHealth;
+    public TMP_Text showDPHealth;
 
     // Player statistics
     public float playerHealth;  // How much health does player have
@@ -33,6 +37,7 @@ public class Player : MonoBehaviour
         isPlayerAlive = true;
         myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
         myCam = GameObject.Find("Main Camera").GetComponent<FPSCamera>(); // Gets the FPScamera script
+        myDp = GameObject.Find("defend").GetComponent<DefensePoint>(); // Gets the DefensePoint script
     }
 
     // Update is called once per frame
@@ -42,6 +47,9 @@ public class Player : MonoBehaviour
         {
             if (isPlayerAlive)
             {   // Player can move since game is running and player is alive
+                // the two health strings are just place holders for the actual health bar
+                showHealth.text = playerHealth.ToString();
+                showDPHealth.text = "DP health:" + myDp.defenseHealth.ToString();
                 Move();
             }
             else
