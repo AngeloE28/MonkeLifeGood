@@ -11,6 +11,13 @@ public class Bullet : MonoBehaviour
     private Boss boss;
     
     public float damage;    // How much damage does one bullet do?
+    public Vector3 hitPoint;
+    public float shootForce;
+    private void Start()
+    {
+        // Moves the bullet
+        this.GetComponent<Rigidbody>().AddForce((hitPoint - this.transform.position).normalized * shootForce, ForceMode.Impulse);
+    }
 
     private void OnCollisionEnter(Collision collision)
     {

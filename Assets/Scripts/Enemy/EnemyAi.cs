@@ -41,15 +41,18 @@ public class EnemyAi : MonoBehaviour
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
 
         showEnemyHealth.text = enemyHealth.ToString();
-
-        if (!playerInSightRange)
+        if (agent.enabled)
         {
-            AttackDefensePoint();
+            if (!playerInSightRange)
+            {
+                AttackDefensePoint();
+            }
+            if (playerInSightRange)
+            {
+                ChasePlayer();
+            }
         }
-        if (playerInSightRange)
-        {
-            ChasePlayer();
-        }
+        else { return; }
     }
 
     // Enemy takes damage
