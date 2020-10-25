@@ -16,17 +16,21 @@ public class GunWithBullets : MonoBehaviour
     public Transform attackPoint;   // where bullets will come out of
 
     // Statistics of the gun
-    public float shootingForce;
     public float timeBetweenSprays;
     public float bulletSpread;
-    public float bulletSpreadWhenCrouching;
+    public float timeTillMaxSpread;
+    public float timeTillMS_Standing;
+    public float timeTillMS_Crouching;
     public float reloadTime;
     public float fireRate;
+    public float recoilCooldown;
+    public float coolDownSpeed;
     public int magSize;
     public int bulletsPerClick;
     public bool allowGunToSpray;
     private int bulletsLeft;
     private int bulletsShot;
+    private float accuracy;
 
     // The variables to control the spray of bullets when player is standing or crouching
     private float xDir;
@@ -96,19 +100,45 @@ public class GunWithBullets : MonoBehaviour
             Reload();
         }
 
+        // Increases the inaccuracy of the gun
+        coolDownSpeed += Time.deltaTime * 60f;
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            // Increases the inaccuracy of the gun
+            accuracy += Time.deltaTime * 4f;
+            if (coolDownSpeed >= fireRate)
+            {
+                coolDownSpeed = 0;
+                recoilCooldown = 1;
+            }
+        }
+        else
+        {
+            // Resets the accuracy so its 100% accurate
+            recoilCooldown -= Time.deltaTime;
+            if (recoilCooldown <= 1)
+            {
+                accuracy = 0f;
+            }
+        }
+
         // Player fires gun
-        if (readyToShoot && shooting & !reloading && bulletsLeft > 0)
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
         {
             bulletsShot = 0;
-
             muzzleFlash.Play();
             Shoot();
         }
 
-        // Player aims down sight
+        AimDownSight();      
+    }
+
+    // Player aims down sight
+    private void AimDownSight()
+    {
         if (Input.GetKey(KeyCode.Mouse1))
         {
-            if(playerCam.fieldOfView > adsFieldOfView)
+            if (playerCam.fieldOfView > adsFieldOfView)
             {
                 playerCam.fieldOfView += (-25 * Time.deltaTime);
             }
@@ -133,43 +163,37 @@ public class GunWithBullets : MonoBehaviour
         Ray ray = playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hitInfo;
 
+        Quaternion fireRotation = Quaternion.LookRotation(transform.forward);
+
+        // Calculate how long before the gun becomes inaccurate when player is standing
+        if (!player.GetComponent<Player>().isCrouched)
+        {
+            timeTillMaxSpread = timeTillMS_Standing;
+        }
+        else // Calculate spread when player is crouching
+        {
+            timeTillMaxSpread = timeTillMS_Crouching;
+        }
+
+        float currentSpread = Mathf.Lerp(0.0f, bulletSpread, accuracy / timeTillMaxSpread);
+
+        fireRotation = Quaternion.RotateTowards(fireRotation, Random.rotation, Random.Range(0.0f, currentSpread));
+
         Vector3 targetPoint;
-        if (Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out hitInfo))
+        if (Physics.Raycast(transform.position, fireRotation * Vector3.forward, out hitInfo, Mathf.Infinity))
         {
             targetPoint = hitInfo.point;
         }
         else
         {
-            targetPoint = ray.GetPoint(100); // A point that is far away from the player
+            targetPoint = ray.GetPoint(100);
         }
-
-        // Direction from attackpoint to targetpoint with no spread
-        Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
-
-        // Calculate spread when player is standing
-        if (!player.GetComponent<Player>().isCrouched)
-        {
-            xDir = Random.Range(-bulletSpread, bulletSpread);
-            yDir = Random.Range(-bulletSpread, bulletSpread);
-        }
-        else // Calculate spread when player is crouching
-        {
-            xDir = Random.Range(-bulletSpreadWhenCrouching, bulletSpreadWhenCrouching);
-            yDir = Random.Range(-bulletSpreadWhenCrouching, bulletSpreadWhenCrouching);
-        }
-
-        // Direction from attackpoint to targetpoint with the spread
-        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(xDir, yDir, 0);
 
         // Spawn the bullets
-        GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);
-        currentBullet.transform.forward = directionWithSpread.normalized;
-
+        GameObject currentBullet = Instantiate(bullet, attackPoint.transform.position, fireRotation);      
+        currentBullet.GetComponent<Bullet>().hitPoint = targetPoint;
         // Destroy bullet after 2 sec
         Destroy(currentBullet.gameObject, 2f);
-
-        // Shoot the bullet
-        currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootingForce, ForceMode.Impulse);
 
         bulletsLeft--;
         bulletsShot++;

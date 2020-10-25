@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
             {   // Player can move since game is running and player is alive
                 // the two health strings are just place holders for the actual health bar
                 showHealth.text = playerHealth.ToString();
-                showDPHealth.text = "DP health:" + myDp.defenseHealth.ToString();
+                showDPHealth.text = myDp.defenseHealth.ToString();
                 Move();
             }
             else
