@@ -18,7 +18,7 @@ public class EnemySpawner : MonoBehaviour
     public class Wave
     {
         public string waveName; // Which wave is it?
-        public GameObject enemyPrefab; // The enemy being spawned
+        public GameObject[] enemyPrefab; // The enemy being spawned
         public int enemyCount; // How many enemies?
         public float spawnRate; // How many enemies are being spawned?
     }
@@ -93,6 +93,7 @@ public class EnemySpawner : MonoBehaviour
         if (nextWave + 1 > waves.Length - 1)
         {
             nextWave = -1; // Sets the index to outside the bounds of the array so it doesnt spawn anything extra
+            this.GetComponent<EnemySpawner>().enabled = false;
         }
         else // Else it just moves on to the next wave
         {
@@ -125,7 +126,7 @@ public class EnemySpawner : MonoBehaviour
         state = SpawnState.SPAWNING; // Spawns the wave
         for (int i = 0; i < enemyWave.enemyCount; i++)
         {
-            SpawnEnemey(enemyWave.enemyPrefab);
+            SpawnEnemey(enemyWave.enemyPrefab[Random.Range(0,enemyWave.enemyPrefab.Length)]);
             yield return new WaitForSeconds(1f / enemyWave.spawnRate); // The spawn rate for spawning the enemy
         }
 

@@ -19,7 +19,7 @@ public class Boss : MonoBehaviour
     public class Wave
     {
         public string waveName; // Which wave is it?
-        public GameObject enemyPrefab; // The enemy being spawned
+        public GameObject[] enemyPrefab; // The enemy being spawned
         public int enemyCount; // How many enemies?
         public float spawnRate; // How many enemies are being spawned?
     }
@@ -140,7 +140,7 @@ public class Boss : MonoBehaviour
 
         for (int i = 0; i < enemyWave.enemyCount; i++)
         {
-            SpawnEnemey(enemyWave.enemyPrefab);
+            SpawnEnemey(enemyWave.enemyPrefab[Random.Range(0,enemyWave.enemyPrefab.Length)]);
             yield return new WaitForSeconds(1f / enemyWave.spawnRate); // The spawn rate for spawning the enemy
         }
 
