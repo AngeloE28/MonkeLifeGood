@@ -5,42 +5,64 @@ using UnityEngine.AI;
 
 public class Slam : MonoBehaviour
 {
-    public float upwardFore;
+    public float upwardForce;
     public float radius;
     public float force;
     public bool allowInvoke = true;
+    public int slamCharge;
     // Start is called before the first frame update
 
     // Update is called once per frame
     void Update()
     {
+        SlamAttack();
+    }
+
+    // Code block for the slam attack
+    private void SlamAttack()
+    {
+        if(slamCharge > 4)
+        {
+            slamCharge = 4;
+        }
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            print("slamma");
-            Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
-
-            foreach (Collider nearbyObject in colliders)
+            if (slamCharge == 4)
             {
-                if (GameObject.FindGameObjectWithTag("Enemy"))
-                {
-                    NavMeshAgent agent = nearbyObject.GetComponent<NavMeshAgent>();
-                    Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
-                    // Disables navmesh agent to be able to apply forces to the enemy
-                    if (agent != null)
-                    {
-                        agent.enabled = false;
-                    }
-                    // Sends the enemy upwards and also applies an explosion force
-                    if (rb != null)
-                    {                       
-                        rb.AddForce(Vector3.up * upwardFore, ForceMode.Impulse);
-                        rb.AddExplosionForce(force, transform.position, radius);
-                    }
+                print("slamma");
+                // Play anim
+                // play sound
+                slamCharge = 0;
+                Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 
+                foreach (Collider nearbyObject in colliders)
+                {
+                    if (GameObject.FindGameObjectWithTag("Enemy"))
+                    {
+                        NavMeshAgent agent = nearbyObject.GetComponent<NavMeshAgent>();
+                        Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
+                        // Disables navmesh agent to be able to apply forces to the enemy
+                        if (agent != null)
+                        {
+                            agent.enabled = false;
+                        }
+                        // Sends the enemy upwards and also applies an explosion force
+                        if (rb != null)
+                        {
+                            rb.AddForce(Vector3.up * upwardForce, ForceMode.Impulse);
+                            rb.AddExplosionForce(force, transform.position, radius);
+                        }
+
+                    }
                 }
             }
-            
+            else
+            {
+                print("Not Ready");
+            }
+
         }
+
 
         // Creates a 4 second delay before agent is re-enabled
         if (allowInvoke)
@@ -64,6 +86,4 @@ public class Slam : MonoBehaviour
             }
         }
     }
-
-
 }

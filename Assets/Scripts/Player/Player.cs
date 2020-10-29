@@ -9,11 +9,11 @@ public class Player : MonoBehaviour
     public GameManager myGameManager; // Ref to game manager
     public DefensePoint myDp;
     public FPSCamera myCam;
-    public TMP_Text showHealth;
-    public TMP_Text showDPHealth;
+    public HealthBar playerHealthBar;
 
     // Player statistics
-    public float playerHealth;  // How much health does player have
+    public float currentPlayerHealth;  // How much health does player have
+    public float maxPlayerHealth = 100;
     public float playerSpeed;   // How fast can player move
     public float walkSpeed = 5f;   // Speed player can move while walking
     public float runSpeed = 2f;   // Speed player can move while sprinting
@@ -31,13 +31,16 @@ public class Player : MonoBehaviour
     public bool isGrounded;    // is player grounded?
     public bool isCrouched;    // is player crouched?
     public bool isPlayerAlive; // Is player alive?
+    public bool isPlayerSprinting = false;
 
     private void Start()
     {
+        currentPlayerHealth = maxPlayerHealth;
+        playerHealthBar.SetMaxhealth(maxPlayerHealth);
         isPlayerAlive = true;
         myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
         myCam = GameObject.Find("Main Camera").GetComponent<FPSCamera>(); // Gets the FPScamera script
-        myDp = GameObject.Find("defend").GetComponent<DefensePoint>(); // Gets the DefensePoint script
+        myDp = GameObject.FindGameObjectWithTag("Defend").GetComponent<DefensePoint>(); // Gets the DefensePoint script
     }
 
     // Update is called once per frame
@@ -47,9 +50,6 @@ public class Player : MonoBehaviour
         {
             if (isPlayerAlive)
             {   // Player can move since game is running and player is alive
-                // the two health strings are just place holders for the actual health bar
-                showHealth.text = playerHealth.ToString();
-                showDPHealth.text = myDp.defenseHealth.ToString();
                 Move();
             }
             else
@@ -72,8 +72,10 @@ public class Player : MonoBehaviour
     // Player takes damage
     public void PlayerTakeDamage(float amount)
     {
-        playerHealth -= amount;
-        if (playerHealth <= 0f)
+        currentPlayerHealth -= amount;
+
+        playerHealthBar.SetHealth(currentPlayerHealth);
+        if (currentPlayerHealth <= 0f)
         {
             isPlayerAlive = false;
         }
@@ -92,6 +94,7 @@ public class Player : MonoBehaviour
 
         Jump();
         Crouch();
+        Sprint();
     }
 
 
@@ -132,10 +135,24 @@ public class Player : MonoBehaviour
             playerSpeed = walkSpeed;
             isCrouched = false;
         }
-        // Player Sprints
+
+    }
+   
+    // Player Sprints
+    private void Sprint()
+    {
         if (Input.GetKey(KeyCode.LeftShift) && !isCrouched)
         {
             playerSpeed = runSpeed;
+            isPlayerSprinting = true;
+        }
+        else
+        {
+            isPlayerSprinting = false;
+        }
+        if(isPlayerSprinting)
+        {
+            // Play sound
         }
     }
 }

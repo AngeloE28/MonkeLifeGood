@@ -25,17 +25,15 @@ public class GunWithBullets : MonoBehaviour
     public float fireRate;
     public float recoilCooldown;
     public float coolDownSpeed;
+    public int bulletsLeft;
     public int magSize;
     public int bulletsPerClick;
     public bool allowGunToSpray;
-    private int bulletsLeft;
+    
+    private int countBullet;
+    private int magCapacity;
     private int bulletsShot;
     private float accuracy;
-
-    // The variables to control the spray of bullets when player is standing or crouching
-    private float xDir;
-    private float yDir;
-
     private bool shooting; // how can player shoot?
     private bool readyToShoot;  // Can player shoot?
     private bool reloading; // is player reloading?
@@ -55,7 +53,7 @@ public class GunWithBullets : MonoBehaviour
     {
         hipFire = this.transform.localPosition;
 
-        bulletsLeft = magSize;
+        magCapacity = magSize;
         readyToShoot = true;
         myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
     }
@@ -70,7 +68,7 @@ public class GunWithBullets : MonoBehaviour
             // Display ammo
             if (ammoDisplay != null)
             {
-                ammoDisplay.SetText("Ammo: " + bulletsLeft / bulletsPerClick + " / " + magSize / bulletsPerClick);
+                ammoDisplay.SetText("Ammo: " + magCapacity / bulletsPerClick + " / " + bulletsLeft / bulletsPerClick);
             }
         }
         else { return; }
@@ -90,12 +88,12 @@ public class GunWithBullets : MonoBehaviour
         }
 
         // Player relaods
-        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magSize && !reloading)
+        if (Input.GetKeyDown(KeyCode.R) && magCapacity < bulletsLeft && !reloading)
         {
             Reload();
         }
         // Player is forced to reload
-        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0)
+        if (readyToShoot && shooting && !reloading && magCapacity <= 0)
         {
             Reload();
         }
@@ -123,10 +121,11 @@ public class GunWithBullets : MonoBehaviour
         }
 
         // Player fires gun
-        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
+        if (readyToShoot && shooting && !reloading && magCapacity > 0)
         {
             bulletsShot = 0;
             muzzleFlash.Play();
+            // Play sound
             Shoot();
         }
 
@@ -140,7 +139,7 @@ public class GunWithBullets : MonoBehaviour
         {
             if (playerCam.fieldOfView > adsFieldOfView)
             {
-                playerCam.fieldOfView += (-25 * Time.deltaTime);
+                playerCam.fieldOfView += (-45 * Time.deltaTime);
             }
             transform.localPosition = Vector3.Slerp(transform.localPosition, aimDownSight, adsSpeed * Time.deltaTime);
         }
@@ -148,7 +147,7 @@ public class GunWithBullets : MonoBehaviour
         {
             if (playerCam.fieldOfView < normalFieldOfView)
             {
-                playerCam.fieldOfView += (25 * Time.deltaTime);
+                playerCam.fieldOfView += (45 * Time.deltaTime);
             }
             transform.localPosition = Vector3.Slerp(transform.localPosition, hipFire, adsSpeed * Time.deltaTime);
         }
@@ -195,9 +194,10 @@ public class GunWithBullets : MonoBehaviour
         // Destroy bullet after 2 sec
         Destroy(currentBullet.gameObject, 2f);
 
-        bulletsLeft--;
+        magCapacity--;
         bulletsShot++;
-
+        countBullet++;
+        
         if (allowInvoke)
         {
             Invoke("ResetShot", fireRate);
@@ -205,7 +205,7 @@ public class GunWithBullets : MonoBehaviour
         }
 
         // Shooting for guns like shotguns or burst fire guns
-        if (bulletsShot < bulletsPerClick && bulletsLeft > 0)
+        if (bulletsShot < bulletsPerClick && magCapacity > 0)
         {
             Invoke("Shoot", fireRate);
         }
@@ -222,7 +222,10 @@ public class GunWithBullets : MonoBehaviour
     private void Reload()
     {
         reloading = true;
+        //bulletsLeft -= countBullet; might add ammo pick up later
         showReloading.gameObject.SetActive(true);
+        // create a bar
+        // play reload anim
         showReloading.SetText("Reloading...");
         Invoke("ReloadFinish", reloadTime); // Calls a function with delay             
     }
@@ -231,7 +234,7 @@ public class GunWithBullets : MonoBehaviour
     private void ReloadFinish()
     {
         showReloading.gameObject.SetActive(false);
-        bulletsLeft = magSize;
+        magCapacity = magSize;
         reloading = false;
     }
 }

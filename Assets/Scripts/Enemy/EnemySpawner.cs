@@ -28,6 +28,10 @@ public class EnemySpawner : MonoBehaviour
 
     private int nextWave;
     public float timeBetweenWaves = 5f; // Time between each waves
+
+    public float titleTimer = 2f;
+    public float titleCountdown;
+
     private float waveCountdown; // Countdown till the next wave
     private float checkIfEnemyAliveCountdown = 1f; // Time limit to search if enemies are still alive
 
@@ -40,10 +44,10 @@ public class EnemySpawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        titleCountdown = titleTimer;
         nextWave = 0; // Start at the first wave
         waveCountdown = timeBetweenWaves;
         myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
-        statusTitle.gameObject.SetActive(true);
     }
 
     // Update is called once per frame
@@ -54,7 +58,7 @@ public class EnemySpawner : MonoBehaviour
         {
             // Check if there are enemies still alive
             if (state == SpawnState.WAITING)
-            {
+            {                    
                 statusTitle.gameObject.SetActive(false);
                 if (!EnemyIsAlive())
                 {
@@ -66,7 +70,11 @@ public class EnemySpawner : MonoBehaviour
             // Interval between waves
             if (waveCountdown <= 0)
             {
-                statusTitle.gameObject.SetActive(true);
+                if (titleCountdown >= 0)
+                {
+                    statusTitle.gameObject.SetActive(true);
+                }
+                else { titleTimer -= Time.deltaTime; }
                 if (state != SpawnState.SPAWNING)
                 {
                     //start spawning wave
@@ -85,10 +93,9 @@ public class EnemySpawner : MonoBehaviour
     private void WaveCleared()
     {
         print("wave finito");
-
         state = SpawnState.COUNTINGDOWN;
         waveCountdown = timeBetweenWaves;
-
+        titleCountdown = titleTimer;
         // Check to see if final wave has been reached
         if (nextWave + 1 > waves.Length - 1)
         {
@@ -100,7 +107,6 @@ public class EnemySpawner : MonoBehaviour
             nextWave++;
         }
     }
-
 
     // Checks if enemies are alive
     private bool EnemyIsAlive()
@@ -126,7 +132,7 @@ public class EnemySpawner : MonoBehaviour
         state = SpawnState.SPAWNING; // Spawns the wave
         for (int i = 0; i < enemyWave.enemyCount; i++)
         {
-            SpawnEnemey(enemyWave.enemyPrefab[Random.Range(0,enemyWave.enemyPrefab.Length)]);
+            SpawnEnemey(enemyWave.enemyPrefab[Random.Range(0, enemyWave.enemyPrefab.Length)]);
             yield return new WaitForSeconds(1f / enemyWave.spawnRate); // The spawn rate for spawning the enemy
         }
 
