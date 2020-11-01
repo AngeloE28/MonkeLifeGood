@@ -219,6 +219,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletRb: {fileID: 595177093938265896}
   impact: {fileID: 7862055748123723859, guid: b14b6ab82160c5248a3a182b29de2db6, type: 3}
+  myAudioSource: {fileID: 0}
+  hitmakerSound: {fileID: 8300000, guid: f6e121d6c57fc554c8f5a04a540dd88c, type: 3}
   damage: 40
   hitPoint: {x: 0, y: 0, z: 0}
   shootForce: 300

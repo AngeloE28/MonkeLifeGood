@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
 
     private EnemyAi enemy;
     private Boss boss;
-    
+
     public float damage;    // How much damage does one bullet do?
     public Vector3 hitPoint;
     public float shootForce;
@@ -23,10 +23,7 @@ public class Bullet : MonoBehaviour
     {
         if(collision.gameObject.tag == "Enemy")
         {
-            // Hit effect
-            GameObject impactGo = Instantiate(impact, transform.position,
-                transform.rotation.normalized);
-            Destroy(impactGo, 2f);
+            HitEffect(impact);
 
             enemy = collision.transform.GetComponent<EnemyAi>();
             enemy.EnemyTakeDamage(damage);
@@ -35,10 +32,7 @@ public class Bullet : MonoBehaviour
         }
         if(collision.gameObject.tag == "Boss")
         {
-            // Hit effect
-            GameObject impactGo = Instantiate(impact, transform.position,
-                transform.rotation.normalized);
-            Destroy(impactGo, 2f);
+            HitEffect(impact);
 
             boss = collision.transform.GetComponent<Boss>();
             boss.BossTakeDamage(damage);
@@ -47,12 +41,16 @@ public class Bullet : MonoBehaviour
         }
         if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Defend")
         {
-
-            GameObject impactGo = Instantiate(impact, transform.position,
-               transform.rotation.normalized);
-            Destroy(impactGo, 2f);
+            HitEffect(impact);
 
             Destroy(this.gameObject);
         }
+    }
+
+    // Hit effect
+    private void HitEffect(GameObject effect)
+    {
+        GameObject impactGo = Instantiate(effect, transform.position, transform.rotation.normalized);
+        Destroy(impactGo, 2f);
     }
 }

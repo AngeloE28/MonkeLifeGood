@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using TMPro;
+using System.Linq;
 
 public class EnemyAi : MonoBehaviour
 {
@@ -18,6 +19,11 @@ public class EnemyAi : MonoBehaviour
 
     public NavMeshAgent agent;  // Navemesh agent of the enemy
 
+    // Sounds
+    public AudioSource enemyAudioSource;
+    public AudioClip hitSound;
+    public AudioClip deathSound;
+
     public LayerMask groundmask;    // Where can enemy walk on
     public LayerMask playerMask;    // Finds objects with layer of player
 
@@ -29,12 +35,13 @@ public class EnemyAi : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {        
         currentEnemyHealth = maxEnemyHealth;
         healthBar.SetMaxhealth(maxEnemyHealth);
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("player"); // Finds gameobject with tag of player
         defensePoint = GameObject.FindGameObjectWithTag("Defend");  // Finds gameobject with tag of Defend
+        enemyAudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -59,12 +66,15 @@ public class EnemyAi : MonoBehaviour
     // Enemy takes damage
     public void EnemyTakeDamage(float amount)
     {
+        enemyAudioSource.PlayOneShot(hitSound);
         currentEnemyHealth -= amount;
 
         healthBar.SetHealth(currentEnemyHealth);
         if (currentEnemyHealth <= 0f)
         {
-            Destroy(gameObject);
+            agent.enabled = false;
+            enemyAudioSource.PlayOneShot(deathSound);
+            Destroy(this.gameObject,1f);
         }
     }
 

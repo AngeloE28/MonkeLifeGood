@@ -10,8 +10,16 @@ public class Slam : MonoBehaviour
     public float force;
     public bool allowInvoke = true;
     public int slamCharge;
-    // Start is called before the first frame update
 
+    // Sounds
+    public AudioSource myAudioSource;
+    public AudioClip explosionSound;
+
+    // Start is called before the first frame update
+    private void Start()
+    {
+        myAudioSource = GetComponent<AudioSource>();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -31,7 +39,7 @@ public class Slam : MonoBehaviour
             {
                 print("slamma");
                 // Play anim
-                // play sound
+                myAudioSource.PlayOneShot(explosionSound);
                 slamCharge = 0;
                 Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
 

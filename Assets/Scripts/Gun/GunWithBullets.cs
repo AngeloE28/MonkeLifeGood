@@ -15,6 +15,11 @@ public class GunWithBullets : MonoBehaviour
     public Camera playerCam; // Ref to main camera
     public Transform attackPoint;   // where bullets will come out of
 
+    // Sounds
+    public AudioSource gunAudioSource;
+    public AudioClip reloadSound;
+    public AudioClip shootSound;
+
     // Statistics of the gun
     public float timeBetweenSprays;
     public float bulletSpread;
@@ -56,6 +61,7 @@ public class GunWithBullets : MonoBehaviour
         magCapacity = magSize;
         readyToShoot = true;
         myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
+        gunAudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -125,7 +131,7 @@ public class GunWithBullets : MonoBehaviour
         {
             bulletsShot = 0;
             muzzleFlash.Play();
-            // Play sound
+            gunAudioSource.PlayOneShot(shootSound);
             Shoot();
         }
 
@@ -226,6 +232,7 @@ public class GunWithBullets : MonoBehaviour
         showReloading.gameObject.SetActive(true);
         // create a bar
         // play reload anim
+        gunAudioSource.PlayOneShot(reloadSound);
         showReloading.SetText("Reloading...");
         Invoke("ReloadFinish", reloadTime); // Calls a function with delay             
     }
