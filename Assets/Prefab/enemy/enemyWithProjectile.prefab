@@ -522,6 +522,36 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &5972536597785719219
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6706592429584374935}
+  m_Layer: 0
+  m_Name: attackpoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6706592429584374935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5972536597785719219}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.065, z: 0.615}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8431265273598098565}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6299490714311472381
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,13 +642,13 @@ GameObject:
   - component: {fileID: 8431265273598098565}
   - component: {fileID: 8431265273598098566}
   - component: {fileID: 8431265273598098567}
-  - component: {fileID: 1333573309211019475}
+  - component: {fileID: -4328721050182465203}
   - component: {fileID: 8431265273598098564}
   - component: {fileID: 8431265273598098586}
   - component: {fileID: 8431265273598098587}
   - component: {fileID: -2301606237942117311}
   m_Layer: 0
-  m_Name: enemy
+  m_Name: enemyWithProjectile
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -639,6 +669,7 @@ Transform:
   - {fileID: 4673227958594030519}
   - {fileID: 7230767693686158535}
   - {fileID: 2327833941273915407}
+  - {fileID: 6706592429584374935}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -668,7 +699,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 932cd56898db82840806f0beeac39e82, type: 2}
+  - {fileID: 2100000, guid: 447b767c6f066e744a971fadedce318e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -689,7 +720,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &1333573309211019475
+--- !u!136 &-4328721050182465203
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -731,7 +762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 705733112e366d04cafa07cdbd205326, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyCanShoot: 0
+  enemyCanShoot: 1
   currentEnemyHealth: 0
   maxEnemyHealth: 100
   healthBar: {fileID: 2367643493619402246}
@@ -741,7 +772,7 @@ MonoBehaviour:
   enemyAudioSource: {fileID: 0}
   hitSound: {fileID: 8300000, guid: f6e121d6c57fc554c8f5a04a540dd88c, type: 3}
   deathSound: {fileID: 8300000, guid: 56bfc461cc65e9b4b987dc63f0927799, type: 3}
-  shootSound: {fileID: 0}
+  shootSound: {fileID: 8300000, guid: 518f3e0aea27fd1449957f7a179ea198, type: 3}
   groundmask:
     serializedVersion: 2
     m_Bits: 256
@@ -750,19 +781,20 @@ MonoBehaviour:
     m_Bits: 1024
   defenseMask:
     serializedVersion: 2
-    m_Bits: 0
-  sightRange: 10
-  attackRange: 0
+    m_Bits: 512
+  sightRange: 20
+  attackRange: 12
   playerInSightRange: 0
   playerInAttackRange: 0
   defenseInAttackRange: 0
   playerDamage: 10
   defensePDamage: 10
-  projectile: {fileID: 0}
-  attackPoint: {fileID: 0}
-  shootForce: 0
-  upwardForce: 0
-  timeBetweenAttacks: 0
+  projectile: {fileID: 2315144036408300058, guid: 54918217179ca3f4abb7d6026fc5ab70,
+    type: 3}
+  attackPoint: {fileID: 6706592429584374935}
+  shootForce: 24
+  upwardForce: 4
+  timeBetweenAttacks: 1.5
 --- !u!195 &8431265273598098587
 NavMeshAgent:
   m_ObjectHideFlags: 0

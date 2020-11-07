@@ -7,6 +7,7 @@ using System.Linq;
 
 public class EnemyAi : MonoBehaviour
 {
+    public bool enemyCanShoot = false;
     public float currentEnemyHealth;
     public float maxEnemyHealth = 100;
     public HealthBar healthBar;
@@ -23,15 +24,28 @@ public class EnemyAi : MonoBehaviour
     public AudioSource enemyAudioSource;
     public AudioClip hitSound;
     public AudioClip deathSound;
+    public AudioClip shootSound;
 
     public LayerMask groundmask;    // Where can enemy walk on
     public LayerMask playerMask;    // Finds objects with layer of player
+    public LayerMask defenseMask;   // Finds object with Defend layer
 
     public float sightRange;    // How far can enemy see?
+    public float attackRange; // Range that enemy will start shooting
     public bool playerInSightRange; // Is player within enemy sight?
+    public bool playerInAttackRange; // Is player within the enemy attack range?
+    public bool defenseInAttackRange; // Is the defense point in attack range?
 
     public float playerDamage;  // How much damage does it do to the player?
     public float defensePDamage;    // How much damage does it do to the defense point?
+
+    // Attacking for shooting
+    public GameObject projectile;
+    public Transform attackPoint;   // where bullets will come out of
+    public float shootForce;
+    public float upwardForce;
+    public float timeBetweenAttacks;
+    private bool alreadyAttacked;
 
     // Start is called before the first frame update
     void Start()
@@ -48,16 +62,42 @@ public class EnemyAi : MonoBehaviour
     void FixedUpdate()
     {
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, playerMask);
+        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, playerMask);
+        defenseInAttackRange = Physics.CheckSphere(transform.position, attackRange, defenseMask);
 
         if (agent.enabled)
         {
-            if (!playerInSightRange)
+            // For ranged enemies
+            if (enemyCanShoot)
             {
-                AttackDefensePoint();
+                if (!playerInSightRange)
+                {
+                    ChaseDefensePoint();
+                }
+                if (playerInSightRange)
+                {
+                    ChasePlayer();
+                }
+                if(playerInAttackRange)
+                {
+                    AttackPlayer();
+                }    
+                if(defenseInAttackRange)
+                {
+                    AttackDefensePoint();
+                }
             }
-            if (playerInSightRange)
+            // For melee enemies
+            if(!enemyCanShoot)
             {
-                ChasePlayer();
+                if (!playerInSightRange)
+                {
+                    ChaseDefensePoint();
+                }
+                if (playerInSightRange)
+                {
+                    ChasePlayer();
+                }
             }
         }
         else { return; }
@@ -91,11 +131,56 @@ public class EnemyAi : MonoBehaviour
     }
 
     // Chase the defense point
-    private void AttackDefensePoint()
+    private void ChaseDefensePoint()
     {
         agent.SetDestination(defensePoint.transform.position);
     }
 
+    // Starts shooting
+    private void AttackPlayer()
+    {
+        agent.SetDestination(this.transform.position);
+
+        transform.LookAt(player.transform);
+
+        if(!alreadyAttacked)
+        {
+            Rigidbody rb = Instantiate(projectile, attackPoint.transform.position, Quaternion.identity).GetComponent<Rigidbody>();
+            rb.AddForce(transform.forward * shootForce, ForceMode.Impulse);
+            rb.AddForce(transform.up * upwardForce, ForceMode.Impulse);
+            enemyAudioSource.PlayOneShot(shootSound);
+
+            Destroy(rb.gameObject, 2f);
+
+            alreadyAttacked = true;
+            Invoke("ResetAttack", timeBetweenAttacks);
+        }
+    }
+
+    private void AttackDefensePoint()
+    {
+        agent.SetDestination(this.transform.position);
+
+        transform.LookAt(defensePoint.transform);
+
+        if (!alreadyAttacked)
+        {
+            Rigidbody rb = Instantiate(projectile, attackPoint.transform.position, Quaternion.identity).GetComponent<Rigidbody>();
+            rb.AddForce(transform.forward * shootForce, ForceMode.Impulse);
+            rb.AddForce(transform.up * upwardForce, ForceMode.Impulse);
+            enemyAudioSource.PlayOneShot(shootSound);
+
+            Destroy(rb.gameObject, 2f);
+
+            alreadyAttacked = true;
+            Invoke("ResetAttack", timeBetweenAttacks);
+        }
+    }
+
+    private void ResetAttack()
+    {
+        alreadyAttacked = false;
+    }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.tag == "player")

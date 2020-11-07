@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3223249468317693419}
   - component: {fileID: -4102090332723700559}
   - component: {fileID: 8183667823942250339}
+  - component: {fileID: -3999451165365984266}
   m_Layer: 0
   m_Name: Enemy_Projectile
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 2315144036408300058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -17.25, y: 1.93, z: -29.01}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -106,7 +107,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
@@ -160,7 +161,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.15714525
+        value: 0.49517137
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -217,3 +218,18 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &-3999451165365984266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2315144036408300058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99192d85ebe1e524cb027a354ea6bcd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  water_impact: {fileID: 7862055748123723859, guid: bed91febc834ca942a0defb388570669,
+    type: 3}
+  damage: 5

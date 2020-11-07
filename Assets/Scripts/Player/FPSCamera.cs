@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FPSCamera : MonoBehaviour
 {
-
     public float mouseSensitivity;  // The aim sensitiviy
     public float hipFireSensitivity = 100f; // The aim sensitivity when player is not aiming
     private float aimDownSightSensitivity = 2f; // divides the hip fire sensitivity by 2

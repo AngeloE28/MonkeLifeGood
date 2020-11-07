@@ -2,14 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using EZCameraShake; // From https://github.com/andersonaddo/EZ-Camera-Shake-Unity
+                     // By Road Turtle Games.
 
 public class Slam : MonoBehaviour
 {
+    public SlamBar slamBar;
+
     public float upwardForce;
     public float radius;
     public float force;
     public bool allowInvoke = true;
     public int slamCharge;
+    public int maxCharge;
+
+    // Camera shake
+    public float cs_magn;
+    public float cs_rough;
+    public float cs_fadeIn;
+    public float cs_fadeOut;
 
     // Sounds
     public AudioSource myAudioSource;
@@ -18,6 +29,7 @@ public class Slam : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        slamBar.SetMaxCharge(maxCharge);
         myAudioSource = GetComponent<AudioSource>();
     }
     // Update is called once per frame
@@ -29,16 +41,18 @@ public class Slam : MonoBehaviour
     // Code block for the slam attack
     private void SlamAttack()
     {
-        if(slamCharge > 4)
+        slamBar.SetCharge(slamCharge);
+        if(slamCharge > maxCharge)
         {
-            slamCharge = 4;
+            slamCharge = maxCharge;
         }
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (slamCharge == 4)
+            if (slamCharge == maxCharge)
             {
                 print("slamma");
                 // Play anim
+                CameraShaker.Instance.ShakeOnce(cs_magn, cs_rough, cs_fadeIn, cs_fadeOut);
                 myAudioSource.PlayOneShot(explosionSound);
                 slamCharge = 0;
                 Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
