@@ -8,6 +8,7 @@ using EZCameraShake; // From https://github.com/andersonaddo/EZ-Camera-Shake-Uni
 public class Slam : MonoBehaviour
 {
     public SlamBar slamBar;
+    public CameraShaker camShaker;
 
     public float upwardForce;
     public float radius;
@@ -31,6 +32,7 @@ public class Slam : MonoBehaviour
     {
         slamBar.SetMaxCharge(maxCharge);
         myAudioSource = GetComponent<AudioSource>();
+        camShaker = GameObject.Find("Main Camera").GetComponent<CameraShaker>();
     }
     // Update is called once per frame
     void Update()
@@ -50,6 +52,7 @@ public class Slam : MonoBehaviour
         {
             if (slamCharge == maxCharge)
             {
+                camShaker.enabled = true;
                 print("slamma");
                 // Play anim
                 CameraShaker.Instance.ShakeOnce(cs_magn, cs_rough, cs_fadeIn, cs_fadeOut);
@@ -77,21 +80,25 @@ public class Slam : MonoBehaviour
 
                     }
                 }
+                //camShaker.enabled = false;
+                Invoke("ResetShaker", 1f);
             }
             else
             {
                 print("Not Ready");
             }
-
+            // Creates a delay before agent is re-enabled
+            if (allowInvoke)
+            {
+                Invoke("ResetAgent", 1.5f);
+                allowInvoke = false;
+            }
         }
+    }
 
-
-        // Creates a 4 second delay before agent is re-enabled
-        if (allowInvoke)
-        {
-            Invoke("ResetAgent", 4);
-            allowInvoke = false;
-        }
+    private void ResetShaker()
+    {
+        camShaker.enabled = false;
     }
 
     // Re-enables the navmesh agent and resets the allowInvoke bool

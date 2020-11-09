@@ -40,6 +40,7 @@ public class EnemySpawner : MonoBehaviour
     public GameManager myGameManager;
     public GameObject player;
     public TMP_Text statusTitle;
+    public TMP_Text waveCleared;
 
     // Start is called before the first frame update
     void Start()
@@ -62,6 +63,7 @@ public class EnemySpawner : MonoBehaviour
                 statusTitle.gameObject.SetActive(false);
                 if (!EnemyIsAlive())
                 {
+                    waveCleared.gameObject.SetActive(true);
                     WaveCleared();
                     return;
                 }
@@ -72,6 +74,7 @@ public class EnemySpawner : MonoBehaviour
             {
                 if (titleCountdown >= 0)
                 {
+                    waveCleared.gameObject.SetActive(false);
                     statusTitle.gameObject.SetActive(true);
                 }
                 else { titleTimer -= Time.deltaTime; }
@@ -99,6 +102,10 @@ public class EnemySpawner : MonoBehaviour
         // Check to see if final wave has been reached
         if (nextWave + 1 > waves.Length - 1)
         {
+            // the two lines under this is just for play testing without the boss for now
+            player.GetComponent<Player>().EndGame(true);
+            myGameManager.isGameRunning = false;
+            //
             nextWave = -1; // Sets the index to outside the bounds of the array so it doesnt spawn anything extra
             this.GetComponent<EnemySpawner>().enabled = false;
         }

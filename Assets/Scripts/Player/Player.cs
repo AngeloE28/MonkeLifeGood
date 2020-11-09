@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -10,6 +11,14 @@ public class Player : MonoBehaviour
     public DefensePoint myDp;
     public FPSCamera myCam;
     public HealthBar playerHealthBar;
+
+    // Damage feedback overlay
+    public Image damageOverlay;
+    private Color alpha;
+
+    // Sounds
+    public AudioSource playerAudioSource;
+    public AudioClip playerHurt;
 
     // Player statistics
     public float currentPlayerHealth;  // How much health does player have
@@ -26,21 +35,25 @@ public class Player : MonoBehaviour
     public Transform groundCheck;   // Checks for the ground
     public float groundDistance = 0.4f; // Radius of sphere created
     public LayerMask groundMask;    // The condition to be checked for objects that has ground layer
+    public LayerMask defenseMask;
 
     private Vector3 velocity;   // Player's physics
     public bool isGrounded;    // is player grounded?
+    public bool isOnDefensePoint;
     public bool isCrouched;    // is player crouched?
     public bool isPlayerAlive; // Is player alive?
     public bool isPlayerSprinting = false;
 
     private void Start()
     {
+        alpha = damageOverlay.color;
         currentPlayerHealth = maxPlayerHealth;
         playerHealthBar.SetMaxhealth(maxPlayerHealth);
         isPlayerAlive = true;
         myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
         myCam = GameObject.Find("Main Camera").GetComponent<FPSCamera>(); // Gets the FPScamera script
         myDp = GameObject.FindGameObjectWithTag("Defend").GetComponent<DefensePoint>(); // Gets the DefensePoint script
+        playerAudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -72,13 +85,32 @@ public class Player : MonoBehaviour
     // Player takes damage
     public void PlayerTakeDamage(float amount)
     {
+        playerAudioSource.PlayOneShot(playerHurt);
         currentPlayerHealth -= amount;
+        if(alpha.a <=100f)
+        {
+            alpha.a += .1f;
+            damageOverlay.color = alpha;
+        }
+
+        Invoke("ResetDamageOverlay", 1f);
 
         playerHealthBar.SetHealth(currentPlayerHealth);
         if (currentPlayerHealth <= 0f)
         {
             isPlayerAlive = false;
         }
+    }
+
+    // Creates a feedblack when player is hit
+    private void ResetDamageOverlay()
+    {
+        if (alpha.a >= 0)
+        {
+            alpha.a -= .1f;
+            damageOverlay.color = alpha;
+        }
+
     }
 
     // Player moves
@@ -103,6 +135,8 @@ public class Player : MonoBehaviour
     {
         // Checks if player is grounded
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        isOnDefensePoint = Physics.CheckSphere(groundCheck.position, groundDistance, defenseMask);
+
 
         // Resets velocity
         if (isGrounded && velocity.y < 0)
@@ -110,7 +144,18 @@ public class Player : MonoBehaviour
             velocity.y = -2f;
         }
 
+        if (isOnDefensePoint && velocity.y < 0)
+        {
+            velocity.y = -2f;
+        }
+
+
         if (Input.GetButtonDown("Jump") && isGrounded && !isCrouched)
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
+        }
+
+        if (Input.GetButtonDown("Jump") && isOnDefensePoint && !isCrouched)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
         }
