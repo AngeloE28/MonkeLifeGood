@@ -10071,6 +10071,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+<<<<<<< HEAD
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1621492211}
@@ -10083,6 +10084,31 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &1621492211
 Transform:
+=======
+  m_GameObject: {fileID: 1628583671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 894191d0005b3c744a10b2db56d96cd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentDefenseHealth: 0
+  maxDefenseHealth: 800
+  fireCount: 1
+  fire: {fileID: 7547937072542538018, guid: cde817c9ecf41604dae146629409a859, type: 3}
+  fireSpawnPoints:
+  - {fileID: 448087231}
+  - {fileID: 1583481687}
+  - {fileID: 1004045397}
+  - {fileID: 179597068}
+  - {fileID: 999190565}
+  - {fileID: 1130052749}
+  - {fileID: 314102680}
+  myGameManager: {fileID: 0}
+  player: {fileID: 0}
+  healthBar: {fileID: 770972}
+--- !u!54 &1628583674
+Rigidbody:
+>>>>>>> main
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
