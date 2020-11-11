@@ -14,6 +14,8 @@ public class FPSCamera : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        AudioListener.volume = PlayerPrefs.GetFloat("Volume_Slider", AudioListener.volume);
+        hipFireSensitivity = PlayerPrefs.GetFloat("Sensitivity_Slider", hipFireSensitivity);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }

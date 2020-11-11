@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -32,15 +33,19 @@ public class EnemySpawner : MonoBehaviour
     public float titleTimer = 2f;
     public float titleCountdown;
 
+    public float objectiveTimer = 2f;
+
     private float waveCountdown; // Countdown till the next wave
     private float checkIfEnemyAliveCountdown = 1f; // Time limit to search if enemies are still alive
 
     private SpawnState state = SpawnState.COUNTINGDOWN;
 
+    // HUD
     public GameManager myGameManager;
     public GameObject player;
     public TMP_Text statusTitle;
     public TMP_Text waveCleared;
+    public TMP_Text objective;
 
     // Start is called before the first frame update
     void Start()
@@ -57,10 +62,18 @@ public class EnemySpawner : MonoBehaviour
         // Is game running?
         if (myGameManager.isGameRunning)
         {
+            // Displays the objectve
+            if(objectiveTimer <= 0)
+            {
+                objective.gameObject.SetActive(false);
+            }
+            else
+            {
+                objectiveTimer -= Time.deltaTime;
+            }
             // Check if there are enemies still alive
             if (state == SpawnState.WAITING)
             {                    
-                statusTitle.gameObject.SetActive(false);
                 if (!EnemyIsAlive())
                 {
                     waveCleared.gameObject.SetActive(true);
@@ -72,12 +85,17 @@ public class EnemySpawner : MonoBehaviour
             // Interval between waves
             if (waveCountdown <= 0)
             {
-                if (titleCountdown >= 0)
+                // Shows which wave is being spawned
+                if (titleCountdown <= 0)
+                {
+                    statusTitle.gameObject.SetActive(false);
+                }
+                else 
                 {
                     waveCleared.gameObject.SetActive(false);
                     statusTitle.gameObject.SetActive(true);
+                    titleCountdown -= Time.deltaTime; 
                 }
-                else { titleTimer -= Time.deltaTime; }
                 if (state != SpawnState.SPAWNING)
                 {
                     //start spawning wave
@@ -101,13 +119,15 @@ public class EnemySpawner : MonoBehaviour
         titleCountdown = titleTimer;
         // Check to see if final wave has been reached
         if (nextWave + 1 > waves.Length - 1)
-        {
+        {            
+            waveCleared.gameObject.SetActive(false);
             // the two lines under this is just for play testing without the boss for now
             player.GetComponent<Player>().EndGame(true);
             myGameManager.isGameRunning = false;
             //
             nextWave = -1; // Sets the index to outside the bounds of the array so it doesnt spawn anything extra
             this.GetComponent<EnemySpawner>().enabled = false;
+
         }
         else // Else it just moves on to the next wave
         {

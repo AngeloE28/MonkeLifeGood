@@ -6,6 +6,12 @@ public class Boss : MonoBehaviour
 {
     public float bossHealth; // How much health does the boss have?
 
+    // Boss path
+    public Transform[] wayPoint;
+    private int current = 0;
+    public float minRemainingDistance = 0.5f;
+
+
     // Which state is the spawner currently in?
     public enum SpawnState
     {
@@ -44,6 +50,9 @@ public class Boss : MonoBehaviour
         nextWave = 0; // Start at the first wave
         waveCountdown = timeBetweenWaves;
         myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script        
+        agent = GetComponent<NavMeshAgent>();
+        agent.autoBraking = false;
+        GoToNextPoint();
     }
 
     // Update is called once per frame
@@ -52,14 +61,19 @@ public class Boss : MonoBehaviour
         // Is game running?
         if (myGameManager.isGameRunning)
         {
+            // The boss's path finding
+            if(!agent.pathPending && agent.remainingDistance < minRemainingDistance)
+            {
+                GoToNextPoint();
+            }
+
+            // Stops the boss from moving and the player has won
             if (bossHealth <= 0f)
             {
                 agent.isStopped = true;
                 player.GetComponent<Player>().EndGame(true);
                 myGameManager.isGameRunning = false;
             }
-            // change the else statement to a follow path instead
-            else { agent.SetDestination(player.transform.position); }
 
             // Check if there are enemies still alive
             if (state == SpawnState.WAITING)
@@ -115,6 +129,18 @@ public class Boss : MonoBehaviour
         }
     }
 
+    // The agent searching for the waypoints
+    private void GoToNextPoint()
+    {
+        // Makes sure there is a path
+        if(wayPoint.Length == 0)
+        {
+            return;
+        }
+
+        agent.destination = wayPoint[current].position;
+        current = (current + 1) % wayPoint.Length;
+    }
 
     // Checks if enemies are alive
     private bool EnemyIsAlive()

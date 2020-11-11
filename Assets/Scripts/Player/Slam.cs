@@ -10,12 +10,14 @@ public class Slam : MonoBehaviour
     public SlamBar slamBar;
     public CameraShaker camShaker;
 
+    // Slam stats
     public float upwardForce;
     public float radius;
     public float force;
     public bool allowInvoke = true;
     public int slamCharge;
     public int maxCharge;
+    public int damage;
 
     // Camera shake
     public float cs_magn;
@@ -62,10 +64,11 @@ public class Slam : MonoBehaviour
 
                 foreach (Collider nearbyObject in colliders)
                 {
-                    if (GameObject.FindGameObjectWithTag("Enemy"))
+                    if (nearbyObject.gameObject.tag == "Enemy")
                     {
                         NavMeshAgent agent = nearbyObject.GetComponent<NavMeshAgent>();
                         Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
+                        EnemyAi enemy = nearbyObject.GetComponent<EnemyAi>();
                         // Disables navmesh agent to be able to apply forces to the enemy
                         if (agent != null)
                         {
@@ -76,6 +79,11 @@ public class Slam : MonoBehaviour
                         {
                             rb.AddForce(Vector3.up * upwardForce, ForceMode.Impulse);
                             rb.AddExplosionForce(force, transform.position, radius);
+                        }
+                        // Enemies take damage
+                        if(enemy != null)
+                        {
+                            enemy.EnemyTakeDamage(damage);
                         }
 
                     }
@@ -96,6 +104,7 @@ public class Slam : MonoBehaviour
         }
     }
 
+    // Disables the EzCamera Shaker script
     private void ResetShaker()
     {
         camShaker.enabled = false;
