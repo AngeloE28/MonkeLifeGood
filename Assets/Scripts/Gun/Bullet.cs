@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
 
     private EnemyAi enemy;
     private Boss boss;
+    private Trailer trailer;
 
     public float damage;    // How much damage does one bullet do?
     public Vector3 hitPoint;
@@ -38,6 +39,13 @@ public class Bullet : MonoBehaviour
             boss.BossTakeDamage(damage);
 
             Destroy(this.gameObject);
+        }
+        if(collision.gameObject.tag == "Trailer")
+        {
+            HitEffect(impact);
+            trailer = collision.transform.GetComponent<Trailer>();
+            trailer.TrailerTakeDamage(damage);
+
         }
         if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Defend")
         {

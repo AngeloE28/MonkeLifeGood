@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class path_test : MonoBehaviour
 {
     public Transform[] wayPoint;
+    public GameObject[] targets;
     private int current = 0;
     public float minRemainingDistance = 0.5f;
 

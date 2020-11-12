@@ -9,6 +9,8 @@ TagManager:
   - Defend
   - player
   - Boss
+  - Waypoint
+  - Trailer
   layers:
   - Default
   - TransparentFX

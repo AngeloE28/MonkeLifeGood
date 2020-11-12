@@ -37,6 +37,7 @@ public class EnemySpawner : MonoBehaviour
 
     private float waveCountdown; // Countdown till the next wave
     private float checkIfEnemyAliveCountdown = 1f; // Time limit to search if enemies are still alive
+    public GameObject bossu;
 
     private SpawnState state = SpawnState.COUNTINGDOWN;
 
@@ -119,11 +120,12 @@ public class EnemySpawner : MonoBehaviour
         titleCountdown = titleTimer;
         // Check to see if final wave has been reached
         if (nextWave + 1 > waves.Length - 1)
-        {            
+        {
+            bossu.gameObject.SetActive(true);
             waveCleared.gameObject.SetActive(false);
             // the two lines under this is just for play testing without the boss for now
-            player.GetComponent<Player>().EndGame(true);
-            myGameManager.isGameRunning = false;
+            //player.GetComponent<Player>().EndGame(true);
+            //myGameManager.isGameRunning = false;
             //
             nextWave = -1; // Sets the index to outside the bounds of the array so it doesnt spawn anything extra
             this.GetComponent<EnemySpawner>().enabled = false;

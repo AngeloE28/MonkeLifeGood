@@ -5,6 +5,7 @@ using UnityEngine.AI;
 public class Boss : MonoBehaviour
 {
     public float bossHealth; // How much health does the boss have?
+    public bool bossTakeDamage;
 
     // Boss path
     public Transform[] wayPoint;
@@ -46,6 +47,7 @@ public class Boss : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        bossTakeDamage = false;
         player = GameObject.FindGameObjectWithTag("player"); // Finds gameobject with tag of player
         nextWave = 0; // Start at the first wave
         waveCountdown = timeBetweenWaves;
@@ -88,7 +90,8 @@ public class Boss : MonoBehaviour
             // Interval between waves
             if (waveCountdown <= 0)
             {
-                transform.GetComponent<BoxCollider>().enabled = false; // Enables box collider so player can damage boss
+                bossTakeDamage = false;
+                //transform.GetComponent<BoxCollider>().enabled = false; // Enables box collider so player can damage boss
                 if (state != SpawnState.SPAWNING)
                 {
                     //start spawning wave
@@ -97,7 +100,8 @@ public class Boss : MonoBehaviour
             }
             else
             {
-                transform.GetComponent<BoxCollider>().enabled = true; // Set to false, so player won't be able to damage it at the start
+                bossTakeDamage = true;
+                //transform.GetComponent<BoxCollider>().enabled = true; // Set to false, so player won't be able to damage it at the start
                 waveCountdown -= Time.deltaTime;
             }
         }
@@ -107,7 +111,10 @@ public class Boss : MonoBehaviour
     // Boss takes damage
     public void BossTakeDamage(float amount)
     {
-        bossHealth -= amount;
+        if (bossTakeDamage)
+        {
+            bossHealth -= amount;
+        }
     }
 
     // If wave has been cleared, start the next one
