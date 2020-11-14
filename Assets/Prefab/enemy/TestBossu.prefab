@@ -237,6 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossHealth: 1000
+  bossTakeDamage: 0
   wayPoint:
   - {fileID: 0}
   - {fileID: 0}
@@ -286,8 +287,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3917837673853930657}
-  - {fileID: 2963427443182643321}
   - {fileID: 651151193650183409}
+  - {fileID: 2963427443182643321}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -335,7 +336,6 @@ GameObject:
   - component: {fileID: 3428682526302503440}
   - component: {fileID: 1982134898676558277}
   - component: {fileID: 4760982495957920522}
-  - component: {fileID: 7048389474437590620}
   - component: {fileID: 4925178101843241473}
   m_Layer: 0
   m_Name: trailer
@@ -358,7 +358,7 @@ Transform:
   - {fileID: 2702500148479532831}
   - {fileID: 1864140547652668720}
   m_Father: {fileID: 3516219623109315401}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &221701872885628762
 MeshFilter:
@@ -458,20 +458,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &7048389474437590620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4988236628077187711}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db01ae935a5862849b5317335b89c0ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 4760982495957920522}
-  bossu: {fileID: 3907150190792283170}
 --- !u!114 &4925178101843241473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,6 +471,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boss: {fileID: 9039992003602567351}
+  takeDamage: 0
+  agent: {fileID: 0}
+  followTarget: {fileID: 3907150190792283170}
 --- !u!1 &6914581719334081407
 GameObject:
   m_ObjectHideFlags: 0
@@ -499,7 +488,6 @@ GameObject:
   - component: {fileID: 536729925357724448}
   - component: {fileID: 676860703077518725}
   - component: {fileID: 4102782949415959175}
-  - component: {fileID: 5671776345742539199}
   - component: {fileID: 7333712854808698403}
   m_Layer: 0
   m_Name: trailer (1)
@@ -522,7 +510,7 @@ Transform:
   - {fileID: 7122558038668799338}
   - {fileID: 2895183146881381993}
   m_Father: {fileID: 3516219623109315401}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8590160677773577901
 MeshFilter:
@@ -622,20 +610,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &5671776345742539199
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6914581719334081407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db01ae935a5862849b5317335b89c0ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 4102782949415959175}
-  bossu: {fileID: 4988236628077187711}
 --- !u!114 &7333712854808698403
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,3 +623,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boss: {fileID: 9039992003602567351}
+  takeDamage: 0
+  agent: {fileID: 0}
+  followTarget: {fileID: 4988236628077187711}

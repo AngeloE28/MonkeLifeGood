@@ -39,13 +39,14 @@ public class EnemyAi : MonoBehaviour
     public float playerDamage;  // How much damage does it do to the player?
     public float defensePDamage;    // How much damage does it do to the defense point?
 
-    // Attacking for shooting
+    // Attacking
     public GameObject projectile;
     public Transform attackPoint;   // where bullets will come out of
     public float shootForce;
     public float upwardForce;
     public float timeBetweenAttacks;
     private bool alreadyAttacked;
+    private bool alreadyTouched;
 
     // Start is called before the first frame update
     void Start()
@@ -108,10 +109,12 @@ public class EnemyAi : MonoBehaviour
     {
         enemyAudioSource.PlayOneShot(hitSound);
         currentEnemyHealth -= amount;
-
+        Rigidbody rb = GetComponent<Rigidbody>();
         healthBar.SetHealth(currentEnemyHealth);
         if (currentEnemyHealth <= 0f)
         {
+            rb.isKinematic = false;
+            rb.useGravity = true;
             agent.enabled = false;
             enemyAudioSource.PlayOneShot(deathSound);
             Destroy(this.gameObject,1f);
@@ -177,22 +180,45 @@ public class EnemyAi : MonoBehaviour
         }
     }
 
+    // Resets the boolean for attacking
     private void ResetAttack()
     {
         alreadyAttacked = false;
     }
-    private void OnCollisionEnter(Collision collision)
+
+    // Resets the boolean for melee attacks
+    void ResetTouch()
     {
-        if (collision.transform.tag == "player")
+        alreadyTouched = false;
+    }
+
+    // Applies damage after every one second passes to the player
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "player")
         {
-            attackPlayer = collision.transform.GetComponent<Player>();
-            attackPlayer.PlayerTakeDamage(playerDamage);
+            if (!alreadyTouched)
+            {
+                attackPlayer = other.transform.GetComponent<Player>();
+                attackPlayer.PlayerTakeDamage(playerDamage);
+
+                alreadyTouched = true;
+                Invoke("ResetTouch", 1f);
+            }
         }
 
-        if (collision.gameObject.tag == "Defend")
+        if (other.transform.tag == "Defend")
         {
-            attackDP = collision.transform.GetComponent<DefensePoint>();
-            attackDP.DefenseTakeDamage(defensePDamage);
+            if (!alreadyTouched)
+            {
+                attackDP = other.transform.GetComponent<DefensePoint>();
+                attackDP.DefenseTakeDamage(defensePDamage);
+                alreadyTouched = true;
+                Invoke("ResetTouch", 1f);
+
+            }
         }
     }
+
+
 }

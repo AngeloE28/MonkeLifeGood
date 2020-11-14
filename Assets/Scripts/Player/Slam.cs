@@ -74,9 +74,12 @@ public class Slam : MonoBehaviour
                         {
                             agent.enabled = false;
                         }
+                        // Enables gravity and disables them from being kinematic
                         // Sends the enemy upwards and also applies an explosion force
                         if (rb != null)
                         {
+                            rb.isKinematic = false;
+                            rb.useGravity = true;
                             rb.AddForce(Vector3.up * upwardForce, ForceMode.Impulse);
                             rb.AddExplosionForce(force, transform.position, radius);
                         }
@@ -118,9 +121,15 @@ public class Slam : MonoBehaviour
         foreach(GameObject allEnemies in enemies)
         {
             NavMeshAgent agent = allEnemies.GetComponent<NavMeshAgent>();
-            if(agent!= null && agent.enabled == false)
+            Rigidbody rb = allEnemies.GetComponent<Rigidbody>();
+            if (agent!= null && agent.enabled == false)
             {
                 agent.enabled = true;
+            }
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+                rb.useGravity = false;
             }
         }
     }
