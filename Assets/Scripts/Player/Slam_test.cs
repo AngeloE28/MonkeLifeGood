@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using EZCameraShake; // From https://github.com/andersonaddo/EZ-Camera-Shake-Unity
-                     // By Road Turtle Games.
+using EZCameraShake;
 
-public class Slam : MonoBehaviour
+public class Slam_test : MonoBehaviour
 {
-    public SlamBar slamBar;
     public CameraShaker camShaker;
 
     // Slam stats
@@ -32,7 +30,6 @@ public class Slam : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        slamBar.SetMaxCharge(maxCharge);
         myAudioSource = GetComponent<AudioSource>();
         camShaker = GameObject.Find("Main Camera").GetComponent<CameraShaker>();
     }
@@ -45,7 +42,6 @@ public class Slam : MonoBehaviour
     // Code block for the slam attack
     private void SlamAttack()
     {
-        slamBar.SetCharge(slamCharge);
         if(slamCharge > maxCharge)
         {
             slamCharge = maxCharge;
@@ -74,7 +70,6 @@ public class Slam : MonoBehaviour
                         {
                             agent.enabled = false;
                         }
-                        // Enables gravity and disables them from being kinematic
                         // Sends the enemy upwards and also applies an explosion force
                         if (rb != null)
                         {
@@ -114,22 +109,26 @@ public class Slam : MonoBehaviour
     }
 
     // Re-enables the navmesh agent and resets the allowInvoke bool
+    // Resets the rigidbody to be kinematic and disable gravity
     private void ResetAgent()
     {
         allowInvoke = true;
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         foreach(GameObject allEnemies in enemies)
         {
-            NavMeshAgent agent = allEnemies.GetComponent<NavMeshAgent>();
-            Rigidbody rb = allEnemies.GetComponent<Rigidbody>();
-            if (agent!= null && agent.enabled == false)
+            if (allEnemies.gameObject.tag == "Enemy")
             {
-                agent.enabled = true;
-            }
-            if (rb != null)
-            {
-                rb.isKinematic = true;
-                rb.useGravity = false;
+                NavMeshAgent agent = allEnemies.GetComponent<NavMeshAgent>();
+                Rigidbody rb = allEnemies.GetComponent<Rigidbody>();
+                if (agent != null && agent.enabled == false)
+                {
+                    agent.enabled = true;
+                }
+                if(rb!= null)
+                {
+                    rb.isKinematic = true;
+                    rb.useGravity = false;
+                }
             }
         }
     }
