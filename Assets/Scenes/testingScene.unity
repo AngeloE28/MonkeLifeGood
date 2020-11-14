@@ -5012,7 +5012,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1322222768
 Transform:
   m_ObjectHideFlags: 0
@@ -5044,16 +5044,12 @@ MonoBehaviour:
   waves:
   - waveName: 1
     enemyPrefab:
-<<<<<<< refs/remotes/origin/main
     - {fileID: 6335857376067349000, guid: e9491d7b31defa74288979067d732e27, type: 3}
     enemyCount: 5
     spawnRate: 1
   - waveName: 1
     enemyPrefab:
     - {fileID: 4175969660708104345, guid: 08371c8c0c3f32c43904f4844c0eef41, type: 3}
-=======
-    - {fileID: 8431265273598098561, guid: ea445095a91e2f44f943df823372ddc4, type: 3}
->>>>>>> Gitkraken is shit
     enemyCount: 5
     spawnRate: 1
   spawnPoints:
@@ -7200,18 +7196,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 229281875da50db4c922223b389297f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< refs/remotes/origin/main
-=======
-  wayPoint:
-  - {fileID: 2012675111}
-  - {fileID: 986335716}
-  - {fileID: 1908561259}
-  - {fileID: 1411662786}
-  targets: []
-  current: 0
-  minRemainingDistance: 0.5
-  agent: {fileID: 0}
->>>>>>> Gitkraken is shit
 --- !u!1 &1694032328
 GameObject:
   m_ObjectHideFlags: 0
@@ -8753,29 +8737,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-<<<<<<< refs/remotes/origin/main
-=======
-    - target: {fileID: 4925178101843241473, guid: 290966ac7c9a43e4e8b82d66b5eccb6d,
-        type: 3}
-      propertyPath: agent
-      value: 
-      objectReference: {fileID: 387109980}
-    - target: {fileID: 4925178101843241473, guid: 290966ac7c9a43e4e8b82d66b5eccb6d,
-        type: 3}
-      propertyPath: followTarget
-      value: 
-      objectReference: {fileID: 1022841528}
-    - target: {fileID: 5671776345742539199, guid: 290966ac7c9a43e4e8b82d66b5eccb6d,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7048389474437590620, guid: 290966ac7c9a43e4e8b82d66b5eccb6d,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
->>>>>>> Gitkraken is shit
     - target: {fileID: 7333712854808698403, guid: 290966ac7c9a43e4e8b82d66b5eccb6d,
         type: 3}
       propertyPath: agent
