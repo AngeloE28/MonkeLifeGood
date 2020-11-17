@@ -1613,8 +1613,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db01ae935a5862849b5317335b89c0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 655972014}
-  bossu: {fileID: 1689633634}
 --- !u!195 &655972014
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4050,8 +4048,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db01ae935a5862849b5317335b89c0ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 1112402820}
-  bossu: {fileID: 655972011}
 --- !u!195 &1112402820
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -5016,7 +5012,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1322222768
 Transform:
   m_ObjectHideFlags: 0
@@ -5048,7 +5044,12 @@ MonoBehaviour:
   waves:
   - waveName: 1
     enemyPrefab:
-    - {fileID: 8431265273598098561, guid: ea445095a91e2f44f943df823372ddc4, type: 3}
+    - {fileID: 6335857376067349000, guid: e9491d7b31defa74288979067d732e27, type: 3}
+    enemyCount: 5
+    spawnRate: 1
+  - waveName: 1
+    enemyPrefab:
+    - {fileID: 4175969660708104345, guid: 08371c8c0c3f32c43904f4844c0eef41, type: 3}
     enemyCount: 5
     spawnRate: 1
   spawnPoints:
@@ -7195,15 +7196,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 229281875da50db4c922223b389297f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wayPoint:
-  - {fileID: 2012675111}
-  - {fileID: 986335716}
-  - {fileID: 1908561259}
-  - {fileID: 1411662786}
-  targets: []
-  current: 0
-  minRemainingDistance: 0.5
-  agent: {fileID: 0}
 --- !u!1 &1694032328
 GameObject:
   m_ObjectHideFlags: 0
@@ -8723,7 +8715,7 @@ PrefabInstance:
     - target: {fileID: 4762612388865147259, guid: 290966ac7c9a43e4e8b82d66b5eccb6d,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4925178101843241473, guid: 290966ac7c9a43e4e8b82d66b5eccb6d,
         type: 3}
