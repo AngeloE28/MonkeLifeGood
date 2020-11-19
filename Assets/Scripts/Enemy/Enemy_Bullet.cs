@@ -39,6 +39,22 @@ public class Enemy_Bullet : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Defend")
+        {
+            other.GetComponent<MeshCollider>().isTrigger = false;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag == "Defend")
+        {
+            other.GetComponent<MeshCollider>().isTrigger = true;
+        }
+    }
+
     // Hit effect
     private void HitEffect(GameObject effect)
     {

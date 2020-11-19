@@ -192,6 +192,15 @@ public class EnemyAi : MonoBehaviour
         alreadyTouched = false;
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.transform.tag == "Defend")
+        {
+            attackDP = collision.transform.GetComponent<DefensePoint>();
+            attackDP.DefenseTakeDamage(defensePDamage);
+        }
+    }
+
     // Applies damage after every one second passes to the player
     private void OnTriggerEnter(Collider other)
     {
@@ -215,10 +224,7 @@ public class EnemyAi : MonoBehaviour
                 attackDP.DefenseTakeDamage(defensePDamage);
                 alreadyTouched = true;
                 Invoke("ResetTouch", 1f);
-
             }
         }
     }
-
-
 }

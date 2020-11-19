@@ -46,6 +46,7 @@ public class Bullet : MonoBehaviour
             trailer = collision.transform.GetComponent<Trailer>();
             trailer.TrailerTakeDamage(damage);
 
+            Destroy(this.gameObject);
         }
         if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Defend")
         {

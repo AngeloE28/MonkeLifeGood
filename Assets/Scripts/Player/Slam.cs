@@ -88,6 +88,19 @@ public class Slam : MonoBehaviour
                         {
                             enemy.EnemyTakeDamage(damage);
                         }
+                    }
+                    if(nearbyObject.gameObject.tag == "Boss" || nearbyObject.gameObject.tag == "Trailer")
+                    {
+                        Boss boss = nearbyObject.GetComponent<Boss>();
+                        Trailer trailer = nearbyObject.GetComponent<Trailer>();
+                        if(boss != null)
+                        {
+                            boss.BossTakeDamage(damage);
+                        }
+                        if(trailer!= null)
+                        {
+                            trailer.TrailerTakeDamage(damage);
+                        }
 
                     }
                 }

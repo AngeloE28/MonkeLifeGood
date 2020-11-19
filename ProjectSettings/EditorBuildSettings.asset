@@ -14,7 +14,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Monke_life_good_V0.02.unity
     guid: 12fbd5972ed7aea49bffd2c4f91fe217
-  - enabled: 1
-    path: Assets/Scenes/testingScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}

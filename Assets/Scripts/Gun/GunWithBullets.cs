@@ -34,7 +34,9 @@ public class GunWithBullets : MonoBehaviour
     public int magSize;
     public int bulletsPerClick;
     public bool allowGunToSpray;
-    
+    public float totalReloadTime = 4f;
+    public float reloadBarTimer;
+
     private int countBullet;
     private int magCapacity;
     private int bulletsShot;
@@ -56,8 +58,8 @@ public class GunWithBullets : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        reloadBarTimer = totalReloadTime;
         hipFire = this.transform.localPosition;
-
         magCapacity = magSize;
         readyToShoot = true;
         myGameManager = GameObject.Find("GameManager").GetComponent<GameManager>(); // Gets the GameManager script
@@ -71,6 +73,13 @@ public class GunWithBullets : MonoBehaviour
         {
             PlayerInput();
 
+            if(reloading)
+            {
+                if (reloadBarTimer > 0)
+                {
+                    reloadBarTimer -= Time.deltaTime;
+                }
+            }
             // Display ammo
             if (ammoDisplay != null)
             {
@@ -240,6 +249,7 @@ public class GunWithBullets : MonoBehaviour
     // Refills the magazine                                                            
     private void ReloadFinish()
     {
+        reloadBarTimer = totalReloadTime;
         showReloading.gameObject.SetActive(false);
         magCapacity = magSize;
         reloading = false;

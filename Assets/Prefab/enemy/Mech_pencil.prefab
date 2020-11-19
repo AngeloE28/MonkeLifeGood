@@ -192,8 +192,8 @@ GameObject:
   - component: {fileID: 4024734303953748650}
   - component: {fileID: 4319492742856172846}
   - component: {fileID: 8159804921779078279}
-  - component: {fileID: 3727599862135354271}
   - component: {fileID: 3846745469726428360}
+  - component: {fileID: 3727599862135354271}
   m_Layer: 0
   m_Name: Mech_pencil
   m_TagString: Enemy
@@ -210,7 +210,7 @@ Transform:
   m_GameObject: {fileID: 4175969660708104345}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -19.645615, y: 1.917, z: -36.65399}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_Children:
   - {fileID: 2969663827988910374}
   - {fileID: 7478216743220252409}
@@ -392,28 +392,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!195 &3727599862135354271
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4175969660708104345}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.15398064
-  m_Speed: 2
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 0
-  m_AutoBraking: 0
-  m_AutoRepath: 0
-  m_Height: 1.8841327
-  m_BaseOffset: 0.9420664
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!114 &3846745469726428360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -456,9 +434,31 @@ MonoBehaviour:
   projectile: {fileID: 2315144036408300058, guid: 54918217179ca3f4abb7d6026fc5ab70,
     type: 3}
   attackPoint: {fileID: 7478216743220252409}
-  shootForce: 24
-  upwardForce: 2
+  shootForce: 32
+  upwardForce: 6
   timeBetweenAttacks: 1.5
+--- !u!195 &3727599862135354271
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4175969660708104345}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.15398064
+  m_Speed: 3
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 0
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.95
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6440766168083889912
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,8 +496,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000071704, y: -0.00025749}
-  m_SizeDelta: {x: 39.99993, y: 34.999878}
+  m_AnchoredPosition: {x: 0, y: -0.00025749}
+  m_SizeDelta: {x: 45, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3774597462829937070
 MonoBehaviour:
@@ -599,8 +599,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.021, y: 1.07}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 1.226}
+  m_SizeDelta: {x: 55, y: 190}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &6171817538217383128
 Canvas:

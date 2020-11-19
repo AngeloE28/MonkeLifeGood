@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.AI;
 public class Boss : MonoBehaviour
 {
-    public float bossHealth; // How much health does the boss have?
-    public bool bossTakeDamage;
+    public float bossCurrentHealth; // How much health does the boss have?
+    public float maxBossHealth;
+    public bool bossCanTakeDamage = false;
 
     // Boss path
     public Transform[] wayPoint;
@@ -42,12 +43,26 @@ public class Boss : MonoBehaviour
     public GameManager myGameManager;
     public GameObject player;
     public NavMeshAgent agent;  // Navemesh agent of the enemy
+    public HealthBar bossHealthBar;
+
+    // Colour changer
+    public Material metal;
+    public Material original;
+
+    // Sounds
+    public AudioSource bossSoundSource;
+    public AudioClip trainSound;
+    public AudioClip hitSound;
+    public AudioClip metalHitSound;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        bossTakeDamage = false;
+        GetComponent<Renderer>().material = original;
+        bossCurrentHealth = maxBossHealth;
+        bossHealthBar.SetMaxhealth(maxBossHealth);
+        bossCanTakeDamage = false;
         player = GameObject.FindGameObjectWithTag("player"); // Finds gameobject with tag of player
         nextWave = 0; // Start at the first wave
         waveCountdown = timeBetweenWaves;
@@ -55,22 +70,30 @@ public class Boss : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         agent.autoBraking = false;
         GoToNextPoint();
+        bossSoundSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
     void Update()
-    {        
+    {
+        bossSoundSource.clip = trainSound;
+        if (!bossSoundSource.isPlaying)
+        {
+            bossSoundSource.Play();
+        }
+        
         // Is game running?
         if (myGameManager.isGameRunning)
         {
+            bossHealthBar.SetHealth(bossCurrentHealth);
             // The boss's path finding
-            if(!agent.pathPending && agent.remainingDistance < minRemainingDistance)
+            if (!agent.pathPending && agent.remainingDistance < minRemainingDistance)
             {
                 GoToNextPoint();
             }
 
             // Stops the boss from moving and the player has won
-            if (bossHealth <= 0f)
+            if (bossCurrentHealth <= 0f)
             {
                 agent.isStopped = true;
                 player.GetComponent<Player>().EndGame(true);
@@ -90,7 +113,7 @@ public class Boss : MonoBehaviour
             // Interval between waves
             if (waveCountdown <= 0)
             {
-                bossTakeDamage = false;
+                bossCanTakeDamage = false;
                 //transform.GetComponent<BoxCollider>().enabled = false; // Enables box collider so player can damage boss
                 if (state != SpawnState.SPAWNING)
                 {
@@ -100,9 +123,17 @@ public class Boss : MonoBehaviour
             }
             else
             {
-                bossTakeDamage = true;
+                bossCanTakeDamage = true;
                 //transform.GetComponent<BoxCollider>().enabled = true; // Set to false, so player won't be able to damage it at the start
                 waveCountdown -= Time.deltaTime;
+            }
+            if (bossCanTakeDamage)
+            {
+                GetComponent<Renderer>().material = original;
+            }
+            if(!bossCanTakeDamage)
+            {
+                GetComponent<Renderer>().material = metal;
             }
         }
         else { return; }
@@ -111,9 +142,17 @@ public class Boss : MonoBehaviour
     // Boss takes damage
     public void BossTakeDamage(float amount)
     {
-        if (bossTakeDamage)
+        //bossHealthBar.SetHealth(bossCurrentHealth);
+        if (bossCanTakeDamage)
         {
-            bossHealth -= amount;
+            bossSoundSource.PlayOneShot(hitSound);
+            //bossSoundSource.clip = hitSound;
+            //bossSoundSource.Play();
+            bossCurrentHealth -= amount;
+        }
+        if(!bossCanTakeDamage)
+        {
+            bossSoundSource.PlayOneShot(metalHitSound);
         }
     }
 

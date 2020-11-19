@@ -135,7 +135,7 @@ public class Player : MonoBehaviour
     {
         // Checks if player is grounded
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        isOnDefensePoint = Physics.CheckSphere(groundCheck.position, groundDistance, defenseMask);
+        //isOnDefensePoint = Physics.CheckSphere(groundCheck.position, groundDistance, defenseMask);
 
 
         // Resets velocity
@@ -144,10 +144,10 @@ public class Player : MonoBehaviour
             velocity.y = -2f;
         }
 
-        if (isOnDefensePoint && velocity.y < 0)
-        {
-            velocity.y = -2f;
-        }
+        //if (isOnDefensePoint && velocity.y < 0)
+        //{
+        //    velocity.y = -2f;
+        //}
 
 
         if (Input.GetButtonDown("Jump") && isGrounded && !isCrouched)
@@ -155,10 +155,10 @@ public class Player : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
         }
 
-        if (Input.GetButtonDown("Jump") && isOnDefensePoint && !isCrouched)
-        {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
-        }
+        //if (Input.GetButtonDown("Jump") && isOnDefensePoint && !isCrouched)
+        //{
+        //    velocity.y = Mathf.Sqrt(jumpHeight * -2 * gravity);
+        //}
 
         velocity.y += gravity * Time.deltaTime;
 
