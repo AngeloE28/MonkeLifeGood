@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro;
 public class Boss : MonoBehaviour
 {
     public float bossCurrentHealth; // How much health does the boss have?
     public float maxBossHealth;
     public bool bossCanTakeDamage = false;
+
+    // Instructions to kill boss
+    public float instructionTimer = 3f;
 
     // Boss path
     public Transform[] wayPoint;
@@ -43,7 +47,10 @@ public class Boss : MonoBehaviour
     public GameManager myGameManager;
     public GameObject player;
     public NavMeshAgent agent;  // Navemesh agent of the enemy
+
+    // HUD
     public HealthBar bossHealthBar;
+    public TMP_Text instructions;
 
     // Colour changer
     public Material metal;
@@ -113,8 +120,17 @@ public class Boss : MonoBehaviour
             // Interval between waves
             if (waveCountdown <= 0)
             {
+                if(instructionTimer <= 0)
+                {
+                    instructions.gameObject.SetActive(false);
+                }
+                else
+                {
+                    instructions.gameObject.SetActive(true);
+                    instructionTimer -= Time.deltaTime;
+                }
                 bossCanTakeDamage = false;
-                //transform.GetComponent<BoxCollider>().enabled = false; // Enables box collider so player can damage boss
+
                 if (state != SpawnState.SPAWNING)
                 {
                     //start spawning wave
@@ -124,7 +140,6 @@ public class Boss : MonoBehaviour
             else
             {
                 bossCanTakeDamage = true;
-                //transform.GetComponent<BoxCollider>().enabled = true; // Set to false, so player won't be able to damage it at the start
                 waveCountdown -= Time.deltaTime;
             }
             if (bossCanTakeDamage)

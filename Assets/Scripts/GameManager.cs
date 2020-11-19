@@ -12,14 +12,56 @@ public class GameManager : MonoBehaviour
     public GameObject uiGameOverWindow; // Displays the  Game OVer window with the uiGameOverMsg
     public TMP_Text uiGameOverMsg; // Displays the game over message depending on the outcome of the game (win or lose)
     public Image harambe; // Displays a memoriam of harambe
+    public GameObject uiPauseWindow;
+    public FPSCamera myCam;
 
     [Header("Gameplay Loop")]
     public bool isGameRunning; //Is the gameplay part of the game currently active?
+    public bool isGamePaused = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        isGamePaused = false;
         isGameRunning = true; // Game is running
+        myCam = GameObject.Find("Main Camera").GetComponent<FPSCamera>(); // Gets the FPScamera script
+    }
+
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
+        {
+            if(isGamePaused)
+            {
+                Resume();
+            }
+            else
+            {
+                Pause();
+            }
+        }
+    }
+
+    // Resumes game
+    public void Resume()
+    {
+        uiPauseWindow.SetActive(false);
+        Time.timeScale = 1f;
+        isGamePaused = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        myCam.enabled = true;
+    }
+
+    // Pauses game
+    public void Pause()
+    {
+        uiPauseWindow.SetActive(true);
+        Time.timeScale = 0f;
+        isGamePaused = true;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        myCam.enabled = false;
     }
 
     // Restarts the game
@@ -31,6 +73,7 @@ public class GameManager : MonoBehaviour
     // Goes back to the main menu
     public void QuitGame()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(0); // Main menu index is 0 in the build settings
     }
 
