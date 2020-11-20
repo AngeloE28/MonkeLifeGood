@@ -8,6 +8,7 @@ public class Trailer : MonoBehaviour
     public Boss boss;
     public bool takeDamage;
 
+    // Trailer path
     public NavMeshAgent agent;
     public GameObject followTarget;
 
@@ -31,7 +32,7 @@ public class Trailer : MonoBehaviour
     {
         agent.SetDestination(followTarget.transform.position);
 
-        if(boss.bossCanTakeDamage)
+        if (boss.bossCanTakeDamage)
         {
             GetComponent<Renderer>().material = original;
             takeDamage = true;
@@ -42,6 +43,20 @@ public class Trailer : MonoBehaviour
             takeDamage = false;
         }
     }
+
+    //// The agent searching for the waypoints
+    //private void GoToNextPoint()
+    //{
+    //    // Makes sure there is a path
+    //    if (wayPoint.Length == 0)
+    //    {
+    //        return;
+    //    }
+
+    //    agent.destination = wayPoint[current].position;
+    //    current = (current + 1) % wayPoint.Length;
+    //}
+
     public void TrailerTakeDamage(float amount)
     {
         if (takeDamage)
