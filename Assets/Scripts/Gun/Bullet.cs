@@ -48,7 +48,7 @@ public class Bullet : MonoBehaviour
 
             Destroy(this.gameObject);
         }
-        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Defend")
+        if (collision.gameObject.tag == "Ground")
         {
             HitEffect(impact);
 
