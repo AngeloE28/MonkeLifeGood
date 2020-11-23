@@ -19,6 +19,10 @@ public class Slam : MonoBehaviour
     public int maxCharge;
     public int damage;
 
+    // Particle systems
+    public ParticleSystem shockwave;
+    public ParticleSystem smoke;
+
     // Camera shake
     public float cs_magn;
     public float cs_rough;
@@ -56,7 +60,8 @@ public class Slam : MonoBehaviour
             {
                 camShaker.enabled = true;
                 print("slamma");
-                // Play anim
+                shockwave.Play();
+                smoke.Play();
                 CameraShaker.Instance.ShakeOnce(cs_magn, cs_rough, cs_fadeIn, cs_fadeOut);
                 myAudioSource.PlayOneShot(explosionSound);
                 slamCharge = 0;
